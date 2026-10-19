@@ -26,6 +26,7 @@ A static site with no framework and no build step, hosted on GitHub Pages.
 | `style.css` | Shared styles, light and dark themes, RTL rules |
 | `app.js` | Shared behavior: project filter, animations, theme toggle, contact form |
 | `Atef_Elsaeed_CV.pdf` | Downloadable CV |
+| `Atef_Elsaeed_CV.docx` | Editable Word version of the CV |
 
 Each page sets its own text for the projects list and other dynamic parts in `window.SITE`, and `app.js` renders them, so both languages share one script.
 
