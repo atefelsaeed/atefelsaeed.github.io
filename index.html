@@ -200,7 +200,7 @@
     <div class="sec-head reveal">
       <span class="label">Projects</span>
       <h2>Featured case studies</h2>
-      <p>Three apps, three different problems: a product I built alone, a big app I made 65% smaller, and a personal project I keep improving.</p>
+      <p>Four projects, four different problems: a product I built alone, a big app I made 65% smaller, a personal app I keep improving, and an open-source tool you can read line by line.</p>
     </div>
 
     <article class="case reveal" id="dikirnis">
@@ -283,6 +283,37 @@
           <div class="module">Qibla<small>direction finder</small></div>
           <div class="module">Hijri calendar<small>key dates</small></div>
         </div>
+      </aside>
+    </article>
+
+    <article class="case reveal" id="reposphere">
+      <div class="case-body">
+        <div class="case-meta"><span class="tag">Open source · in active development</span><span class="mono">github.com/atefelsaeed/RepoSphere</span></div>
+        <h3>RepoSphere</h3>
+        <dl>
+          <div><dt>Context</dt><dd>A unified dashboard for developers who work across many repositories on more than one Git provider. Repos, commits, pull requests, issues, releases, notifications and gists from GitHub and GitLab in one place, instead of switching between tabs and accounts.</dd></div>
+          <div><dt>My role</dt><dd>Built solo and open source, from the product spec and design system to the code. Flutter, web-first, with the same codebase targeting Android, iOS, macOS, Windows and Linux.</dd></div>
+          <div><dt>Technical decisions</dt><dd>Clean Architecture with domain, data and presentation layers, Riverpod for state and GoRouter for navigation. Each provider has its own data source behind one repository, so GitLab was added without touching the screens. GitHub sign-in uses the OAuth Device Flow, tokens live in secure storage, and an expired token anywhere in the app logs the user out through one global observer.</dd></div>
+          <div><dt>Quality</dt><dd>GitHub Actions runs static analysis, tests and a web build on every push. Sentry for crash reporting. Work is planned in sprints and documented in the repository.</dd></div>
+          <div><dt>Next</dt><dd>Multi-account support, so one person can connect several GitHub and GitLab accounts, for example one per client.</dd></div>
+        </dl>
+        <div class="links">
+          <a href="https://github.com/atefelsaeed/RepoSphere" target="_blank" rel="noopener">View the code on GitHub</a>
+        </div>
+      </div>
+      <aside class="panel" aria-label="How RepoSphere brings providers together">
+        <span class="label">Many providers, one dashboard</span>
+        <ul class="tree">
+          <li>GitHub<ul><li>Personal repos</li><li>Organizations</li></ul></li>
+          <li>GitLab<ul><li>Projects</li><li style="color:var(--ok)">More accounts (next)</li></ul></li>
+        </ul>
+        <div class="modules">
+          <div class="module">Repos &amp; files<small>branch selector, syntax highlighting</small></div>
+          <div class="module">Commits<small>full diff view</small></div>
+          <div class="module">PRs &amp; issues<small>comment threads</small></div>
+          <div class="module">Notifications<small>unread count, mark read</small></div>
+        </div>
+        <p class="note">Flutter · Riverpod · GoRouter · Supabase · Sentry · GitHub Actions</p>
       </aside>
     </article>
 
@@ -388,16 +419,48 @@
  "all": "All",
  "projects": [
   {
+   "n": "RepoSphere",
+   "c": "Open source",
+   "d": "One dashboard for GitHub and GitLab repos, PRs, issues and notifications. Flutter web-first, Clean Architecture, Riverpod, CI.",
+   "m": "In active development",
+   "l": [
+    [
+     "GitHub",
+     "https://github.com/atefelsaeed/RepoSphere"
+    ]
+   ]
+  },
+  {
    "n": "QSalary",
    "c": "Fintech",
    "d": "Earned wage access app. Led development of financial flows, authentication and deep linking.",
-   "m": "40K+ downloads", "l": [["Google Play", "https://play.google.com/store/apps/details?id=app.qsalary.com"], ["App Store", "https://apps.apple.com/jp/app/qsalary/id1580559019"]]
+   "m": "40K+ downloads",
+   "l": [
+    [
+     "Google Play",
+     "https://play.google.com/store/apps/details?id=app.qsalary.com"
+    ],
+    [
+     "App Store",
+     "https://apps.apple.com/jp/app/qsalary/id1580559019"
+    ]
+   ]
   },
   {
    "n": "Sulfah",
    "c": "Fintech",
    "d": "Lending app. Built iOS Live Activities, deep linking, secure auth and improved onboarding.",
-   "m": "500K+ downloads", "l": [["Google Play", "https://play.google.com/store/apps/details?id=com.sulfah"], ["App Store", "https://apps.apple.com/sa/app/id1523225841"]]
+   "m": "500K+ downloads",
+   "l": [
+    [
+     "Google Play",
+     "https://play.google.com/store/apps/details?id=com.sulfah"
+    ],
+    [
+     "App Store",
+     "https://apps.apple.com/sa/app/id1523225841"
+    ]
+   ]
   },
   {
    "n": "Dikirnis On",
@@ -503,7 +566,17 @@
    "n": "Delta Oil",
    "c": "Enterprise",
    "d": "Field operations and inventory app. Improved stability as downloads grew from 1K to 5K+.",
-   "m": "5K+ downloads", "l": [["Google Play", "https://play.google.com/store/apps/details?id=delta.oil.app"], ["App Store", "https://apps.apple.com/us/app/delta-oil/id6745424979"]]
+   "m": "5K+ downloads",
+   "l": [
+    [
+     "Google Play",
+     "https://play.google.com/store/apps/details?id=delta.oil.app"
+    ],
+    [
+     "App Store",
+     "https://apps.apple.com/us/app/delta-oil/id6745424979"
+    ]
+   ]
   },
   {
    "n": "TikiTaka",

@@ -199,7 +199,7 @@ img { max-width: 100%; }
     <div class="sec-head reveal">
       <span class="label">المشاريع</span>
       <h2>دراسات حالة مختارة</h2>
-      <p>تلات تطبيقات وتلات مشاكل مختلفة: منتج بنيته لوحدي، وتطبيق كبير صغّرته 65%، ومشروع شخصي لسه بطوّره.</p>
+      <p>أربع مشاريع وأربع مشاكل مختلفة: منتج بنيته لوحدي، وتطبيق كبير صغّرته 65%، وتطبيق شخصي لسه بطوّره، وأداة مفتوحة المصدر تقدر تقرا كودها سطر سطر.</p>
     </div>
 
     <article class="case reveal" id="dikirnis">
@@ -282,6 +282,37 @@ img { max-width: 100%; }
           <div class="module">القبلة<small>تحديد الاتجاه</small></div>
           <div class="module">التقويم الهجري<small>المناسبات المهمة</small></div>
         </div>
+      </aside>
+    </article>
+
+    <article class="case reveal" id="reposphere">
+      <div class="case-body">
+        <div class="case-meta"><span class="tag">مفتوح المصدر · تحت التطوير</span><span class="mono">github.com/atefelsaeed/RepoSphere</span></div>
+        <h3>RepoSphere</h3>
+        <dl>
+          <div><dt>الفكرة</dt><dd>لوحة واحدة للمطورين اللي شغالين على ريبوهات كتير وعلى أكتر من منصة. الريبوهات والـ commits والـ pull requests والـ issues والإصدارات والإشعارات من GitHub وGitLab في مكان واحد، بدل التنقل بين التابات والحسابات.</dd></div>
+          <div><dt>دوري</dt><dd>بنيته لوحدي ومفتوح المصدر، من مواصفات المنتج ونظام التصميم لحد الكود. Flutter للويب أولًا، وبنفس الكود على Android وiOS وmacOS وWindows وLinux.</dd></div>
+          <div><dt>القرارات التقنية</dt><dd>Clean Architecture بطبقات domain وdata وpresentation، وRiverpod لإدارة الحالة، وGoRouter للتنقل. كل منصة ليها data source خاص بيها ورا repository واحد، فإضافة GitLab متطلبتش أي تعديل في الشاشات. تسجيل الدخول لـ GitHub بـ OAuth Device Flow، والتوكنز في تخزين آمن، ولو التوكن انتهى في أي مكان بيعمل تسجيل خروج من خلال observer واحد للتطبيق كله.</dd></div>
+          <div><dt>الجودة</dt><dd>GitHub Actions بيشغّل التحليل والاختبارات وبناء نسخة الويب مع كل push، وSentry لتتبع الأعطال. والشغل متقسم سبرنتات وموثّق في الريبو.</dd></div>
+          <div><dt>الجاي</dt><dd>دعم أكتر من حساب، علشان تربط كذا حساب GitHub وGitLab، مثلًا حساب لكل عميل.</dd></div>
+        </dl>
+        <div class="links">
+          <a href="https://github.com/atefelsaeed/RepoSphere" target="_blank" rel="noopener">شوف الكود على GitHub</a>
+        </div>
+      </div>
+      <aside class="panel" aria-label="إزاي RepoSphere بيجمع المنصات">
+        <span class="label">منصات كتير، لوحة واحدة</span>
+        <ul class="tree">
+          <li>GitHub<ul><li>ريبوهات شخصية</li><li>منظمات</li></ul></li>
+          <li>GitLab<ul><li>مشاريع</li><li style="color:var(--ok)">حسابات إضافية (الجاي)</li></ul></li>
+        </ul>
+        <div class="modules">
+          <div class="module">الريبوهات والملفات<small>اختيار الفرع وتلوين الكود</small></div>
+          <div class="module">الـ Commits<small>عرض الـ diff كامل</small></div>
+          <div class="module">PRs والـ Issues<small>التعليقات</small></div>
+          <div class="module">الإشعارات<small>عدد غير المقروء</small></div>
+        </div>
+        <p class="note" dir="ltr">Flutter · Riverpod · GoRouter · Supabase · Sentry · GitHub Actions</p>
       </aside>
     </article>
 
@@ -396,6 +427,7 @@ window.SITE = {
     defaultSubject: "رسالة من البورتفوليو"
   },
   projects: [
+    { n: "RepoSphere", c: "مفتوح المصدر", d: "لوحة واحدة لريبوهات GitHub وGitLab والـ PRs والـ issues والإشعارات. Flutter للويب أولًا، Clean Architecture، Riverpod، CI.", m: "تحت التطوير", l: [["GitHub", "https://github.com/atefelsaeed/RepoSphere"]] },
     { n: "QSalary", c: "تكنولوجيا مالية", d: "صرف جزء من المرتب قبل ميعاده. قدت تطوير الرحلات المالية وتسجيل الدخول والـ deep linking.", m: "+40 ألف تحميل", l: [["Google Play", "https://play.google.com/store/apps/details?id=app.qsalary.com"], ["App Store", "https://apps.apple.com/jp/app/qsalary/id1580559019"]] },
     { n: "سلفة", c: "تكنولوجيا مالية", d: "تطبيق تمويل. بنيت iOS Live Activities والـ deep linking وتسجيل دخول آمن وحسّنت تجربة البداية.", m: "+500 ألف تحميل", l: [["Google Play", "https://play.google.com/store/apps/details?id=com.sulfah"], ["App Store", "https://apps.apple.com/sa/app/id1523225841"]] },
     { n: "دكرنس أون", c: "تطبيق شامل", d: "تطبيق محلي فيه أكتر من 10 قطاعات وحجوزات ووظائف وسوق. شريك مؤسس والمطور الوحيد للموبايل.", m: "+2,500 مستخدم", l: [["Google Play", "https://play.google.com/store/apps/details?id=com.dkonline.app"], ["App Store", "https://apps.apple.com/us/app/id6773242084"]] },

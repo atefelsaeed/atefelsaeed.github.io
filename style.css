@@ -31,7 +31,7 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; overflow-x: hidden; overflow-x: clip; }
 body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.6; padding-inline: 20px; overflow-x: hidden; }
 .wrap { max-width: 1120px; margin-inline: auto; }
 a { color: var(--accent); text-decoration: none; }
@@ -370,3 +370,5 @@ footer { padding-block: 32px 48px; color: var(--muted); font-size: 0.85rem; bord
   [dir="rtl"] .stat:nth-child(even) { padding-right: 12px; border-right: 1px solid var(--line); }
   [dir="rtl"] .badge.b1 { left: -10px; } [dir="rtl"] .badge.b2 { right: -10px; }
 }
+
+[dir="rtl"] .tree { font-family: var(--body); font-size: 0.88rem; }
