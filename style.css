@@ -372,3 +372,20 @@ footer { padding-block: 32px 48px; color: var(--muted); font-size: 0.85rem; bord
 }
 
 [dir="rtl"] .tree { font-family: var(--body); font-size: 0.88rem; }
+
+/* Skip link */
+.skip { position: absolute; inset-inline-start: 12px; top: -48px; z-index: 40; padding: 8px 14px; border-radius: 8px; background: var(--accent); color: #fff; font-size: 0.9rem; }
+.skip:focus { top: 8px; text-decoration: none; }
+
+/* Collapsible detail (case studies, earlier roles) */
+details.more { margin-top: 14px; }
+details.more > summary { cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); padding: 6px 0; }
+details.more > summary::-webkit-details-marker { display: none; }
+details.more > summary::after { content: "+"; font-size: 1rem; line-height: 1; transition: transform .2s; }
+details.more[open] > summary::after { transform: rotate(45deg); }
+details.more > dl { margin-top: 10px; }
+details.earlier { padding-block: 12px; }
+
+/* Real app screenshots inside case-study panels */
+.shots { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 10px; }
+.shots img { display: block; width: 100%; height: auto; border-radius: 16px; border: 1px solid var(--line); background: var(--screen); }
