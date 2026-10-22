@@ -1,0 +1,13 @@
+  <section id="skills">
+    <div class="sec-head reveal">
+      <span class="label">{{skills.label}}</span>
+      <h2>{{skills.title}}</h2>
+    </div>
+    <div class="skill-grid"{{#if @root.rtl}} dir="ltr"{{/if}}>{{#each skills.groups}}
+      <div class="skill-box reveal"{{#if @root.rtl}} dir="rtl"{{/if}}><h3>{{t}}</h3><div class="pills"{{#if @root.rtl}} dir="ltr"{{/if}}>{{#each pills}}<span class="pill">{{this}}</span>{{/each}}</div></div>{{/each}}
+    </div>
+    <div class="also reveal">
+      <span class="label">{{skills.alsoLabel}}</span>
+      <div class="pills">{{#each skills.also}}<span class="pill">{{this}}</span>{{/each}}</div>
+    </div>
+  </section>

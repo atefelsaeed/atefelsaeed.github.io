@@ -1,0 +1,39 @@
+  <section id="contact">
+    <div class="contact">
+      <div class="contact-info reveal">
+        <div class="sec-head" style="margin:0">
+          <span class="label">{{contact.label}}</span>
+          <h2>{{contact.title}}</h2>
+          <p>{{contact.intro}}</p>
+        </div>
+        <div class="contact-list">
+          <div class="contact-row"><span class="label">{{contact.emailLabel}}</span><span class="v{{#if @root.rtl}} ltr{{/if}}">{{contact.email}}</span><button class="copy" type="button" data-copy="{{contact.email}}">{{contact.copy}}</button></div>
+          <div class="contact-row"><span class="label">{{contact.phoneLabel}}</span><span class="v{{#if @root.rtl}} ltr{{/if}}">{{contact.phone}}</span><button class="copy" type="button" data-copy="{{contact.phoneRaw}}">{{contact.copy}}</button></div>
+          <div class="contact-row"><span class="label">{{contact.locationLabel}}</span><span class="v">{{contact.location}}</span><span></span></div>
+        </div>
+        <a class="btn wa" style="width:fit-content" href="{{contact.waUrl}}" target="_blank" rel="noopener">
+          {{svg "whatsapp"}}
+          {{contact.waButton}}
+        </a>
+        <div class="socials">
+          <a href="{{social.linkedin}}" target="_blank" rel="noopener" aria-label="LinkedIn">{{svg "linkedin"}}</a>
+          <a href="{{social.github}}" target="_blank" rel="noopener" aria-label="GitHub">{{svg "github"}}</a>
+          <a href="{{social.medium}}" target="_blank" rel="noopener" aria-label="Medium">{{svg "medium"}}</a>
+        </div>
+      </div>
+
+      <form id="contactForm" class="reveal" novalidate>
+        <div class="row2">
+          <div class="field"><label for="cf-name">{{contact.form.name}}</label><input id="cf-name" name="name" type="text" autocomplete="name" required></div>
+          <div class="field"><label for="cf-email">{{contact.form.email}}</label><input id="cf-email" name="email" type="email" autocomplete="email"{{#if @root.rtl}} dir="ltr"{{/if}} required></div>
+        </div>
+        <div class="field"><label for="cf-subject">{{contact.form.subject}}</label><input id="cf-subject" name="subject" type="text" placeholder="{{contact.form.subjectPlaceholder}}"></div>
+        <div class="field"><label for="cf-msg">{{contact.form.message}}</label><textarea id="cf-msg" name="message" required placeholder="{{contact.form.messagePlaceholder}}"></textarea></div>
+        <div class="form-actions">
+          <button class="btn primary" type="submit" data-via="email">{{contact.form.byEmail}}</button>
+          <button class="btn wa" type="submit" data-via="wa">{{contact.form.byWa}}</button>
+        </div>
+        <p class="form-note" id="formNote">{{contact.form.note}}</p>
+      </form>
+    </div>
+  </section>

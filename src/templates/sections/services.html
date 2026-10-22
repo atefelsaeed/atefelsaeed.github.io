@@ -1,0 +1,14 @@
+  <section id="services">
+    <div class="sec-head reveal">
+      <span class="label">{{services.label}}</span>
+      <h2>{{services.title}}</h2>
+      <p>{{services.intro}}</p>
+    </div>
+    <div class="services">{{#each services.items}}
+      <div class="svc reveal"><span class="ico">{{svg icon}}</span><h3>{{t}}</h3><p>{{d}}</p></div>{{/each}}
+    </div>
+    <div class="sub-head reveal" style="margin-top:64px"><div><span class="label">{{services.howLabel}}</span><h3>{{services.howTitle}}</h3></div></div>
+    <div class="steps">{{#each services.steps}}
+      <div class="step reveal"><h3>{{t}}</h3><p>{{d}}</p></div>{{/each}}
+    </div>
+  </section>

@@ -1,0 +1,39 @@
+  <header class="hero">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="hero-text">
+      <div class="intro">
+        <img class="avatar" src="{{files.avatar}}" alt="{{hero.avatarAlt}}" width="56" height="56">
+        <div><b>{{hero.greet}}</b><span class="status"><i></i>{{hero.status}}</span></div>
+      </div>
+      <h1>{{hero.titlePre}}<span class="rotator"><span id="rotText">{{app.words.0}}</span><span class="caret" aria-hidden="true"></span></span></h1>
+      <p class="lede">{{hero.lede}}</p>
+      <div class="cta">
+        <a class="btn primary" href="#work">{{hero.viewProjects}}</a>
+        <a class="btn" href="{{files.cv}}" target="_blank" rel="noopener">{{hero.downloadCv}}</a>
+        <a class="btn wa" href="{{contact.waUrl}}" target="_blank" rel="noopener">{{hero.whatsapp}}</a>
+      </div>
+      <div class="stats">{{#each stats}}
+        <div class="stat"><b><span data-count="{{count}}"{{#if sep}} data-sep="1"{{/if}}>{{text}}</span>{{suffix}}</b><span>{{label}}</span></div>{{/each}}
+      </div>
+    </div>
+
+    <div class="phone-stage" aria-label="{{hero.previewLabel}}">
+      <div>
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="screen">{{#each slides}}
+            <div class="slide{{#if @first}} on{{/if}}" data-slide="{{@index}}">
+              <div class="app-head"><span class="app-icon" style="background:{{gradient}}">{{icon}}</span><div><b>{{name}}</b><small>{{sub}}</small></div></div>
+              {{#if tiles}}<div class="tiles">{{#each tiles}}<div class="tile">{{this}}</div>{{/each}}<div class="tile new">{{newTile}}</div></div>{{/if}}
+              {{#if prayers}}{{#each prayers}}<div class="prayer{{#if next}} next{{/if}}"><span>{{n}}</span><span>{{s}}</span></div>{{/each}}{{/if}}
+              {{#if meters}}{{#each meters}}<div class="meter"><span>{{label}}</span><div class="bar{{#if after}} after{{/if}}"></div></div>{{/each}}{{/if}}
+              {{#each cards}}<div class="mini-card"><b>{{b}}</b><span style="color:var(--muted)">{{s}}</span></div>{{/each}}
+            </div>{{/each}}
+          </div>
+        </div>
+        <div class="dots" role="tablist" aria-label="{{hero.dotsLabel}}">{{#each slides}}
+          <button{{#if @first}} class="on"{{/if}} type="button" data-go="{{@index}}" aria-label="{{name}}"></button>{{/each}}
+        </div>
+      </div>
+    </div>
+  </header>

@@ -1,0 +1,11 @@
+  <section id="blog">
+    <div class="sec-head reveal">
+      <span class="label">{{blog.label}}</span>
+      <h2>{{blog.title}}</h2>
+      <p>{{blog.intro}}</p>
+    </div>
+    <div class="posts">{{#each blog.posts}}
+      <a class="post reveal" href="{{url}}" target="_blank" rel="noopener"><div class="post-meta"><span class="tag">{{tag}}</span><span class="label">{{date}}</span></div><h3{{#if @root.rtl}} dir="ltr"{{/if}}>{{title}}</h3><p>{{desc}}</p><span class="read">{{@root.blog.readLabel}}</span></a>{{/each}}
+    </div>
+    <div style="margin-top:24px" class="reveal"><a class="btn" href="{{blog.medium}}" target="_blank" rel="noopener">{{blog.allLabel}}</a></div>
+  </section>

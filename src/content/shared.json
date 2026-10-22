@@ -1,0 +1,148 @@
+{
+  "site": {
+    "origin": "https://atefelsaeed.github.io",
+    "year": 2026
+  },
+  "person": {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Atef Elsaeed",
+    "alternateName": "عاطف السعيد",
+    "jobTitle": "Senior Flutter Developer",
+    "url": "https://atefelsaeed.github.io/",
+    "image": "https://atefelsaeed.github.io/atef.jpg",
+    "email": "mailto:atefelsaid3@gmail.com",
+    "address": { "@type": "PostalAddress", "addressLocality": "Cairo", "addressCountry": "EG" },
+    "knowsAbout": ["Flutter", "Dart", "Clean Architecture", "Bloc", "Riverpod", "Firebase", "CI/CD", "Mobile app development"],
+    "sameAs": ["https://www.linkedin.com/in/atefelsaeed/", "https://github.com/atefelsaeed", "https://medium.com/@atefelsaid3"]
+  },
+  "files": {
+    "cv": "Atef_Elsaeed_CV.pdf",
+    "avatar": "atef-sm.jpg",
+    "portrait": "atef.jpg",
+    "ogImage": "og-image.png"
+  },
+  "contact": {
+    "email": "atefelsaid3@gmail.com",
+    "phone": "+20 102 364 2940",
+    "phoneRaw": "+201023642940",
+    "wa": "201023642940"
+  },
+  "social": {
+    "linkedin": "https://www.linkedin.com/in/atefelsaeed/",
+    "github": "https://github.com/atefelsaeed",
+    "medium": "https://medium.com/@atefelsaid3"
+  },
+  "nav": {
+    "links": [
+      { "id": "top" },
+      { "id": "about" },
+      { "id": "services" },
+      { "id": "experience" },
+      { "id": "work" },
+      { "id": "skills" },
+      { "id": "blog" },
+      { "id": "contact" }
+    ]
+  },
+  "stats": [
+    { "id": "years", "count": 5, "text": "5", "suffix": "+" },
+    { "id": "apps", "count": 15, "text": "15", "suffix": "+" },
+    { "id": "sulfah", "count": 500, "text": "500", "suffix": "K+" },
+    { "id": "dikirnis", "count": 2500, "text": "2,500", "suffix": "+", "sep": true }
+  ],
+  "slides": [
+    { "id": "dikirnis", "icon": "DO", "gradient": "linear-gradient(135deg,#0A63C2,#12A3C9)" },
+    { "id": "miqat", "icon": "M", "gradient": "linear-gradient(135deg,#0E7C6B,#3CC4AE)" },
+    { "id": "prime-source", "icon": "PS", "gradient": "linear-gradient(135deg,#7A4BD1,#B07CFF)" }
+  ],
+  "about": {
+    "hl": [{ "icon": "mobile" }, { "icon": "layers" }, { "icon": "team" }, { "icon": "product" }]
+  },
+  "services": {
+    "items": [{ "icon": "mobile" }, { "icon": "bolt" }, { "icon": "layers" }, { "icon": "card" }, { "icon": "bell" }, { "icon": "upload" }]
+  },
+  "cases": {
+    "dikirnis": {
+      "id": "dikirnis",
+      "pkg": "com.dkonline.app",
+      "links": [
+        { "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=com.dkonline.app" },
+        { "label": "App Store", "url": "https://apps.apple.com/us/app/id6773242084" },
+        { "url": "https://play.google.com/store/apps/details?id=com.dkonline.vendor" }
+      ],
+      "shots": [{ "src": "assets/shots/dikirnis-home.jpg" }, { "src": "assets/shots/dikirnis-listing.jpg" }],
+      "proShots": [
+        { "src": "assets/shots/dikirnis-pro-home.jpg" },
+        { "src": "assets/shots/dikirnis-pro-products.jpg" },
+        { "src": "assets/shots/dikirnis-pro-analytics.jpg" }
+      ]
+    },
+    "primeSource": {
+      "id": "prime-source",
+      "pkg": "com.almasdaralawal.hajj",
+      "links": [
+        { "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=com.almasdaralawal.hajj" },
+        { "label": "App Store", "url": "https://apps.apple.com/kw/app/id6763935166" }
+      ],
+      "bars": [{ "w": "100%" }, { "w": "34%", "after": true }]
+    },
+    "miqat": {
+      "id": "miqat",
+      "pkg": "com.miqat.islamic",
+      "links": [
+        { "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=com.miqat.islamic" },
+        { "label": "App Store", "url": "https://apps.apple.com/us/app/id6782164550" }
+      ],
+      "shots": [{ "src": "assets/shots/miqat-home.jpg" }, { "src": "assets/shots/miqat-quran.jpg" }, { "src": "assets/shots/miqat-mushaf.jpg" }]
+    },
+    "reposphere": {
+      "id": "reposphere",
+      "pkg": "github.com/atefelsaeed/RepoSphere",
+      "links": [{ "url": "https://atefelsaeed.github.io/RepoSphere/" }, { "url": "https://github.com/atefelsaeed/RepoSphere" }],
+      "shots": [{ "src": "assets/shots/reposphere-inbox.jpg" }, { "src": "assets/shots/reposphere-detail.jpg" }],
+      "stack": "Flutter · Riverpod · GoRouter · Supabase · Sentry · GitHub Actions"
+    }
+  },
+  "skills": {
+    "groups": [
+      { "pills": ["Flutter", "Dart", "Android", "iOS (Swift basics)"] },
+      { "pills": ["Bloc", "Riverpod", "Provider", "GetX"] },
+      { "pills": ["Clean Architecture", "MVVM", "SOLID", "Repository pattern"] },
+      { "pills": ["REST · Dio", "GraphQL", "WebSockets", "Socket.IO", "SignalR"] },
+      { "pills": ["Auth", "Firestore", "FCM", "Analytics", "Crashlytics"] },
+      { "pills": ["GitHub Actions", "Codemagic", "Fastlane", "App Store Connect", "Play Console"] }
+    ]
+  },
+  "blog": {
+    "medium": "https://medium.com/@atefelsaid3",
+    "posts": [
+      { "title": "Mastering Tree Shaking in Flutter", "url": "https://medium.com/@atefelsaid3/mastering-tree-shaking-in-flutter-a-comprehensive-guide-to-optimizing-your-app-deedc098e4cc" },
+      { "title": "Why const Makes Your App Faster, but Sometimes Larger", "url": "https://medium.com/@atefelsaid3/why-using-const-in-flutter-makes-your-app-faster-but-sometimes-larger-2933a618782f" },
+      { "title": "Compile Time vs Run Time in Flutter", "url": "https://medium.com/@atefelsaid3/compile-time-vs-run-time-in-the-flutter-mobile-application-lifecycle-a221f9b3c613" },
+      { "title": "Navigation Tracking with RouteObserver and Riverpod", "url": "https://medium.com/@atefelsaid3/mastering-navigation-tracking-in-flutter-a-complete-guide-to-routeobserver-with-riverpod-ea23a12fb80c" },
+      { "title": "static, final, const, dynamic and var: How They Affect Memory", "url": "https://medium.com/@atefelsaid3/title-understanding-static-final-const-dynamic-and-var-in-flutter-how-they-affect-memory-35967829b34b" },
+      { "title": "Comparing Dart's Loops: Finding the Fastest Option", "url": "https://medium.com/@atefelsaid3/comparing-darts-loops-finding-the-fastest-option-e71b12130bb8" }
+    ]
+  },
+  "projects": [
+    { "id": "reposphere", "links": [{ "url": "https://atefelsaeed.github.io/RepoSphere/" }, { "label": "GitHub", "url": "https://github.com/atefelsaeed/RepoSphere" }] },
+    { "id": "qsalary", "links": [{ "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=app.qsalary.com" }, { "label": "App Store", "url": "https://apps.apple.com/jp/app/qsalary/id1580559019" }] },
+    { "id": "sulfah", "links": [{ "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=com.sulfah" }, { "label": "App Store", "url": "https://apps.apple.com/sa/app/id1523225841" }] },
+    { "id": "dikirnis", "links": [{ "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=com.dkonline.app" }, { "label": "App Store", "url": "https://apps.apple.com/us/app/id6773242084" }] },
+    { "id": "dikirnis-pro", "links": [{ "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=com.dkonline.vendor" }] },
+    { "id": "atlas" },
+    { "id": "dhahirah", "links": [{ "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=com.dhr.gov" }, { "label": "App Store", "url": "https://apps.apple.com/us/app/id6771886773" }] },
+    { "id": "takamol-survey" },
+    { "id": "prime-source", "links": [{ "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=com.almasdaralawal.hajj" }, { "label": "App Store", "url": "https://apps.apple.com/kw/app/id6763935166" }] },
+    { "id": "miqat", "links": [{ "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=com.miqat.islamic" }, { "label": "App Store", "url": "https://apps.apple.com/us/app/id6782164550" }] },
+    { "id": "gateplus" },
+    { "id": "performs" },
+    { "id": "fmac" },
+    { "id": "delta-oil", "links": [{ "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=delta.oil.app" }, { "label": "App Store", "url": "https://apps.apple.com/us/app/delta-oil/id6745424979" }] },
+    { "id": "tikitaka" },
+    { "id": "future-shops" },
+    { "id": "xo-egypt" },
+    { "id": "clixy" }
+  ]
+}

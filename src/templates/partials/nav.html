@@ -1,0 +1,18 @@
+<nav aria-label="{{nav.label}}">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="mark">AE</span>{{nav.brand}}</a>
+    <ul class="nav-links" id="navLinks">{{#each nav.links}}
+      <li><a href="#{{id}}">{{t}}</a></li>{{/each}}
+    </ul>
+    <div class="nav-actions">
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="{{ui.themeLabel}}">
+        {{svg "moon"}}
+      </button>
+      <a class="lang-btn" href="{{otherLang.file}}" lang="{{otherLang.code}}" hreflang="{{otherLang.code}}">{{otherLang.name}}</a>
+      <a class="btn primary small hire" href="#contact">{{nav.hire}}</a>
+      <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-label="{{ui.menuLabel}}" aria-expanded="false" aria-controls="navLinks">
+        {{svg "menu"}}
+      </button>
+    </div>
+  </div>
+</nav>

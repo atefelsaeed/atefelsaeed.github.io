@@ -1,45 +1,7 @@
+/* Page behavior: mobile menu, hero (rotating words, phone slides, count-up), scroll reveal, scroll progress. */
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* Projects data */
   var T = window.SITE || {};
-  var S = T.strings || {};
-  var projects = T.projects || [];
-  var grid = document.getElementById('projects');
-  var filters = document.getElementById('filters');
-  var ALL = T.all || 'All';
-  var cats = [ALL];
-  projects.forEach(function (p) { if (cats.indexOf(p.c) < 0) cats.push(p.c); });
-
-  function esc(s) { return String(s).replace(/[&<>"]/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]; }); }
-  grid.innerHTML = projects.map(function (p) {
-    var links = p.l ? '<span class="links">' + p.l.map(function (x) { return '<a href="' + x[1] + '" target="_blank" rel="noopener">' + esc(x[0]) + '</a>'; }).join('') + '</span>' : '';
-    return '<div class="card" data-cat="' + esc(p.c) + '"><div class="card-top"><span class="tag">' + esc(p.c) + '</span><span class="platforms">Android · iOS</span></div><h4>' + esc(p.n) + '</h4><p>' + esc(p.d) + '</p>' + (p.m ? '<span class="metric">' + esc(p.m) + '</span>' : '') + links + '</div>';
-  }).join('');
-  filters.innerHTML = cats.map(function (c, i) {
-    var n = c === ALL ? projects.length : projects.filter(function (p) { return p.c === c; }).length;
-    return '<button class="filter" type="button" aria-pressed="' + (i === 0) + '" data-cat="' + esc(c) + '">' + esc(c) + '<span class="n">' + n + '</span></button>';
-  }).join('');
-  filters.addEventListener('click', function (e) {
-    var b = e.target.closest('.filter'); if (!b) return;
-    var cat = b.getAttribute('data-cat');
-    filters.querySelectorAll('.filter').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
-    grid.querySelectorAll('.card').forEach(function (card) {
-      var show = cat === ALL || card.getAttribute('data-cat') === cat;
-      card.classList.toggle('hide', !show);
-      card.classList.remove('fade');
-      if (show && !reduce) { void card.offsetWidth; card.classList.add('fade'); }
-    });
-  });
-
-  /* Theme toggle */
-  var root = document.documentElement;
-  document.getElementById('themeBtn').addEventListener('click', function () {
-    var dark = root.getAttribute('data-theme') ? root.getAttribute('data-theme') === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
-    root.setAttribute('data-theme', dark ? 'light' : 'dark');
-    try { localStorage.setItem('ae-theme', root.getAttribute('data-theme')); } catch (e) {}
-  });
-  try { var saved = localStorage.getItem('ae-theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
 
   /* Mobile menu */
   var menuBtn = document.getElementById('menuBtn'), navLinks = document.getElementById('navLinks');
@@ -124,36 +86,4 @@
   }
   window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
   toTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); });
-
-  /* Toast + copy */
-  var toast = document.getElementById('toast'), tt;
-  function say(msg) { toast.textContent = msg; toast.classList.add('on'); clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove('on'); }, 2200); }
-  document.querySelectorAll('[data-copy]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var v = b.getAttribute('data-copy');
-      var done = function () { say((S.copied || 'Copied') + ' ' + v); };
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(v).then(done, function () { selectText(b.previousElementSibling); say(S.copyFallback || 'Press Ctrl+C to copy'); });
-      else { selectText(b.previousElementSibling); say(S.copyFallback || 'Press Ctrl+C to copy'); }
-    });
-  });
-  function selectText(el) { var r = document.createRange(); r.selectNodeContents(el); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
-
-  /* Contact form: builds an email or WhatsApp message */
-  var form = document.getElementById('contactForm'), note = document.getElementById('formNote');
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var via = (e.submitter && e.submitter.getAttribute('data-via')) || 'email';
-    var name = form.name.value.trim(), email = form.email.value.trim(), subject = form.subject.value.trim(), msg = form.message.value.trim();
-    if (!name || !msg || (via === 'email' && !/^\S+@\S+\.\S+$/.test(email))) {
-      note.textContent = !name ? S.needName : !msg ? S.needMsg : S.badEmail;
-      note.classList.add('err'); return;
-    }
-    note.classList.remove('err');
-    var body = msg + '\n\n— ' + name + (email ? ' (' + email + ')' : '');
-    var url = via === 'wa'
-      ? 'https://wa.me/201023642940?text=' + encodeURIComponent((subject ? subject + '\n\n' : '') + body)
-      : 'mailto:atefelsaid3@gmail.com?subject=' + encodeURIComponent(subject || S.defaultSubject || 'Hello from your portfolio') + '&body=' + encodeURIComponent(body);
-    var a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener'; document.body.appendChild(a); a.click(); a.remove();
-    note.textContent = via === 'wa' ? S.openingWa : S.openingMail;
-  });
 })();

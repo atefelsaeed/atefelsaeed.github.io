@@ -1,0 +1,12 @@
+    <article class="case reveal" id="{{id}}">
+      {{> partials/case-body}}
+      <aside class="panel" aria-label="{{asideLabel}}">
+        <div class="shots">{{#each shots}}<img src="{{src}}" alt="{{alt}}" width="540" loading="lazy">{{/each}}</div>
+        <span class="label">{{providersLabel}}</span>
+        {{#with tree}}{{> partials/tree}}{{/with}}
+        <div class="modules">{{#each modules}}
+          <div class="module">{{t}}<small>{{d}}</small></div>{{/each}}
+        </div>
+        <p class="note"{{#if @root.rtl}} dir="ltr"{{/if}}>{{stack}}</p>
+      </aside>
+    </article>

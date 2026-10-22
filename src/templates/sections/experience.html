@@ -1,0 +1,13 @@
+  <section id="experience">
+    <div class="sec-head reveal">
+      <span class="label">{{experience.label}}</span>
+      <h2>{{experience.title}}</h2>
+      <p>{{experience.intro}}</p>
+    </div>
+    <div class="timeline">{{#each experience.jobs}}
+      {{> partials/job}}{{/each}}
+      <details class="more earlier"><summary>{{experience.earlierLabel}}</summary>{{#each experience.earlier}}
+      {{> partials/job}}{{/each}}
+      </details>
+    </div>
+  </section>

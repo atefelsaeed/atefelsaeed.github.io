@@ -1,0 +1,12 @@
+    <article class="case reveal" id="{{id}}">
+      {{> partials/case-body}}
+      <aside class="panel" aria-label="{{asideLabel}}">
+        <span class="label">{{scaleLabel}}</span>
+        <div class="bars">{{#each bars}}
+          <div class="bar-row"><header><span>{{label}}</span><span{{#if @root.rtl}} class="ltr"{{/if}}>{{value}}</span></header><div class="size-bar{{#if after}} after{{/if}} grow" style="--w:{{w}}"></div></div>{{/each}}
+        </div>
+        <ul class="cuts">{{#each cuts}}<li>{{this}}</li>{{/each}}</ul>
+        <span class="label">{{rolesLabel}}</span>
+        <div class="roles">{{#each roles}}<span class="role">{{this}}</span>{{/each}}</div>
+      </aside>
+    </article>
