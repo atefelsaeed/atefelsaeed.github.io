@@ -1,9 +1,12 @@
 #!/usr/bin/env node
-// Builds the site into dist/:  src/content/*.json + src/templates/** -> one HTML page per language,
-// src/css/*.css -> style.css, src/js/*.js -> app.js, public/** copied as is.
+// Builds the site into dist/:  src/content/*.json + src/templates/** -> HTML pages for every language,
+// src/css/*.css -> style.css, src/js/*.js -> app.js, public/** copied as is, sitemap.xml generated.
 //
 //   node scripts/build.mjs [--out dist]
+//
+// Pages per language: home, /projects/ and one /projects/<id>/ page for every entry in "cases".
 
+import { execFileSync } from 'node:child_process';
 import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -45,40 +48,113 @@ async function loadTemplates() {
 }
 
 const encodeQuery = (s) => encodeURIComponent(s).replace(/[!'()*]/g, (c) => '%' + c.charCodeAt(0).toString(16).toUpperCase());
+const hrefOf = (file) => '/' + file.replace(/index\.html$/, '');
 
-function clientProjects(projects) {
-  return projects.map((p) => {
-    const item = { n: p.n, c: p.c, d: p.d };
-    if (p.m) item.m = p.m;
-    if (p.links?.length) {
-      item.l = p.links.map((l) => {
-        if (!l?.label || !l?.url) throw new Error(`Project "${p.id}" has a link without a label or url`);
-        return [l.label, l.url];
-      });
+// Every page of one language: { key, kind, file, href, url }. The same key in another language is its translation.
+function describePages(data, origin) {
+  const { base, file } = data.page;
+  const pages = [
+    { key: 'home', kind: 'home', file },
+    { key: 'projects', kind: 'projects', file: `${base}projects/index.html` },
+    ...data.cases.map((c) => ({ key: `project:${c.id}`, kind: 'project', slug: c.id, file: `${base}projects/${c.id}/index.html` })),
+  ];
+  return pages.map((p) => ({ ...p, code: data.page.code, href: hrefOf(p.file), url: origin + hrefOf(p.file) }));
+}
+
+// Language-level data: shared + language file, with the lists the templates need already resolved.
+function languageData(shared, langs, code) {
+  const data = merge(shared, langs[code]);
+  data.contact.waUrl = `https://wa.me/${data.contact.wa}?text=${encodeQuery(data.contact.waText)}`;
+
+  const caseIds = new Set(data.cases.map((c) => c.id));
+  data.projects = data.projects.map((p) => {
+    const item = { ...p };
+    if (caseIds.has(p.id)) item.href = `/${data.page.base}projects/${p.id}/`;
+    item.hasLinks = Boolean(item.href || item.links?.length);
+    for (const l of item.links ?? []) {
+      if (!l?.label || !l?.url) throw new Error(`Project "${p.id}" has a link without a label or url`);
     }
     return item;
   });
-}
+  const byId = new Map(data.projects.map((p) => [p.id, p]));
+  data.featured = data.home.featured.map((id) => {
+    if (!byId.has(id)) throw new Error(`home.featured lists "${id}", which is not in projects`);
+    return byId.get(id);
+  });
 
-// Everything a template can read for one language.
-function pageData(shared, langs, code) {
-  const data = merge(shared, langs[code]);
-  const origin = data.site.origin;
-  const urlOf = (file) => (file === 'index.html' ? `${origin}/` : `${origin}/${file}`);
-  const pages = LANGUAGES.map((c) => ({ code: c, file: langs[c].page.file, url: urlOf(langs[c].page.file) }));
-  const other = LANGUAGES.find((c) => c !== code);
-  data.pages = pages;
-  data.page = { ...data.page, url: urlOf(data.page.file) };
-  data.otherLang = other ? { code: other, file: langs[other].page.file, name: langs[other].page.name } : null;
-  data.contact.waUrl = `https://wa.me/${data.contact.wa}?text=${encodeQuery(data.contact.waText)}`;
+  const counts = new Map();
+  for (const p of data.projects) counts.set(p.c, (counts.get(p.c) ?? 0) + 1);
+  data.categories = [
+    { name: data.app.all, count: data.projects.length, active: true },
+    ...[...counts].map(([name, count]) => ({ name, count, active: false })),
+  ];
   data.clientData = {
     all: data.app.all,
-    projects: clientProjects(data.projects),
     words: data.app.words,
     strings: data.app.strings,
     contact: { email: data.contact.email, wa: data.contact.wa },
+    cases: Object.fromEntries(data.cases.map((c) => [c.id, `/${data.page.base}projects/${c.id}/`])),
   };
   return data;
+}
+
+function navLinks(data, page) {
+  return data.nav.links.map((l) => {
+    let href;
+    if (page.kind === 'home') href = `#${l.id}`;
+    else if (l.id === 'work') href = `/${data.page.base}projects/`;
+    else if (l.id === 'top') href = data.page.home;
+    else href = `${data.page.home}#${l.id}`;
+    return { ...l, href, active: page.kind !== 'home' && l.id === 'work' };
+  });
+}
+
+function pageContext(data, langs, byKey, page) {
+  const ctx = { ...data };
+  const alternates = LANGUAGES.map((code) => byKey.get(page.key).get(code));
+  const other = alternates.find((a) => a.code !== page.code);
+  ctx.page = { ...data.page, kind: page.kind, url: page.url, href: page.href, projectsHref: `/${data.page.base}projects/`, skip: page.kind === 'home' ? 'about' : 'top' };
+  ctx.alternates = alternates.map(({ code, url }) => ({ code, url }));
+  ctx.defaultUrl = alternates[0].url;
+  ctx.otherLang = other ? { code: other.code, name: langs[other.code].page.name, href: other.href } : null;
+  const links = navLinks(data, page);
+  ctx.nav = { ...data.nav, links, brandHref: links[0].href, hireHref: page.kind === 'home' ? '#contact' : `${data.page.home}#contact` };
+
+  if (page.kind === 'home') {
+    ctx.seo = { title: data.meta.title, description: data.meta.description, ogTitle: data.meta.ogTitle, ogDescription: data.meta.ogDescription };
+  } else if (page.kind === 'projects') {
+    const p = data.projectsPage;
+    ctx.seo = { title: p.seoTitle, description: p.seoDescription, ogTitle: p.seoTitle, ogDescription: p.seoDescription };
+  } else {
+    const c = data.cases.find((x) => x.id === page.slug);
+    ctx.case = { ...c, template: `cases/${c.id}` };
+    ctx.seo = { title: c.seo.title, description: c.seo.description, ogTitle: c.seo.title, ogDescription: c.seo.description };
+  }
+  return ctx;
+}
+
+function sitemapXml(groups, lastmod) {
+  const lines = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+  ];
+  for (const group of groups) {
+    for (const p of group) {
+      lines.push(`  <url><loc>${p.url}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}`);
+      for (const a of group) lines.push(`    <xhtml:link rel="alternate" hreflang="${a.code}" href="${a.url}"/>`);
+      lines.push('  </url>');
+    }
+  }
+  lines.push('</urlset>', '');
+  return lines.join('\n');
+}
+
+function lastModified() {
+  try {
+    return execFileSync('git', ['log', '-1', '--format=%cs'], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim() || null;
+  } catch {
+    return null;
+  }
 }
 
 const concat = async (dir, names, ext) =>
@@ -98,21 +174,41 @@ export async function build({ outDir = join(ROOT, 'dist') } = {}) {
   const { layout, partials, icons } = await loadTemplates();
   const engine = createEngine({ partials, icons });
 
+  const perLang = Object.fromEntries(LANGUAGES.map((code) => [code, languageData(shared, langs, code)]));
+  const described = Object.fromEntries(LANGUAGES.map((code) => [code, describePages(perLang[code], shared.site.origin)]));
+  const byKey = new Map();
+  for (const code of LANGUAGES) {
+    for (const p of described[code]) {
+      if (!byKey.has(p.key)) byKey.set(p.key, new Map());
+      byKey.get(p.key).set(code, p);
+    }
+  }
+  for (const [key, versions] of byKey) {
+    if (versions.size !== LANGUAGES.length) throw new Error(`Page "${key}" exists in ${[...versions.keys()]} but not in every language`);
+  }
+
   await rm(out, { recursive: true, force: true });
   await mkdir(out, { recursive: true });
   await cp(join(ROOT, 'public'), out, { recursive: true });
 
   const pages = [];
   for (const code of LANGUAGES) {
-    const data = pageData(shared, langs, code);
-    const html = engine
-      .renderString(layout, data, 'layout')
-      .replace(/\n[ \t]*(?=\n)/g, ''); // drop the blank lines left behind by block tags
-    if (html.includes('{{')) throw new Error(`${data.page.file}: unresolved "{{" in the output`);
-    await writeFile(join(out, data.page.file), html);
-    pages.push({ code, file: data.page.file, url: data.page.url });
+    for (const page of described[code]) {
+      const ctx = pageContext(perLang[code], langs, byKey, page);
+      const template = `pages/${page.kind}`;
+      if (!(template in partials)) throw new Error(`Missing template src/templates/${template}.html`);
+      ctx.body = engine.renderString(partials[template], ctx, template);
+      const html = engine
+        .renderString(layout, ctx, 'layout')
+        .replace(/\n[ \t]*(?=\n)/g, ''); // drop the blank lines left behind by block tags
+      if (html.includes('{{')) throw new Error(`${page.file}: unresolved "{{" in the output`);
+      await mkdir(dirname(join(out, page.file)), { recursive: true });
+      await writeFile(join(out, page.file), html);
+      pages.push({ code, key: page.key, kind: page.kind, file: page.file, href: page.href, url: page.url });
+    }
   }
 
+  await writeFile(join(out, 'sitemap.xml'), sitemapXml([...byKey.values()].map((v) => [...v.values()]), lastModified()));
   await writeFile(join(out, 'style.css'), await concat(join(ROOT, 'src/css'), CSS_FILES, 'css'));
   await writeFile(join(out, 'app.js'), await concat(join(ROOT, 'src/js'), JS_FILES, 'js'));
 
@@ -124,5 +220,5 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const outDir = i > -1 ? resolve(process.argv[i + 1]) : join(ROOT, 'dist');
   const t0 = performance.now();
   const { pages } = await build({ outDir });
-  console.log(`Built ${pages.map((p) => p.file).join(', ')} -> ${relative(process.cwd(), outDir) || '.'} in ${Math.round(performance.now() - t0)} ms`);
+  console.log(`Built ${pages.length} pages (${pages.map((p) => p.file).join(', ')}) -> ${relative(process.cwd(), outDir) || '.'} in ${Math.round(performance.now() - t0)} ms`);
 }

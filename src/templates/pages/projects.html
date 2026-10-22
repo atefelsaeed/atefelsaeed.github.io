@@ -1,0 +1,14 @@
+  <section class="page">
+    <div class="crumbs" role="navigation" aria-label="{{projectPage.breadcrumb}}"><a href="{{page.home}}">{{projectPage.home}}</a><span aria-hidden="true">/</span><span aria-current="page">{{projectPage.projects}}</span></div>
+    <div class="sec-head">
+      <h1>{{projectsPage.title}}</h1>
+      <p>{{projectsPage.intro}}</p>
+    </div>
+    <div class="filters" id="filters" role="group" aria-label="{{projectsPage.filtersLabel}}">{{#each categories}}
+      <button class="filter" type="button" aria-pressed="{{#if active}}true{{else}}false{{/if}}" data-cat="{{name}}">{{name}}<span class="n">{{count}}</span></button>{{/each}}
+    </div>
+    <div class="grid" id="projects" style="margin-top:20px">{{#each projects}}
+      {{> partials/project-card}}{{/each}}
+    </div>
+    <p class="note" style="margin-top:16px">{{projectsPage.note}}</p>
+  </section>

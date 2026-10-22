@@ -2,14 +2,14 @@
     <div class="glow" aria-hidden="true"></div>
     <div class="hero-text">
       <div class="intro">
-        <img class="avatar" src="{{files.avatar}}" alt="{{hero.avatarAlt}}" width="56" height="56">
+        <img class="avatar" src="/{{files.avatar}}" alt="{{hero.avatarAlt}}" width="56" height="56">
         <div><b>{{hero.greet}}</b><span class="status"><i></i>{{hero.status}}</span></div>
       </div>
       <h1>{{hero.titlePre}}<span class="rotator"><span id="rotText">{{app.words.0}}</span><span class="caret" aria-hidden="true"></span></span></h1>
       <p class="lede">{{hero.lede}}</p>
       <div class="cta">
         <a class="btn primary" href="#work">{{hero.viewProjects}}</a>
-        <a class="btn" href="{{files.cv}}" target="_blank" rel="noopener">{{hero.downloadCv}}</a>
+        <a class="btn" href="/{{files.cv}}" target="_blank" rel="noopener">{{hero.downloadCv}}</a>
         <a class="btn wa" href="{{contact.waUrl}}" target="_blank" rel="noopener">{{hero.whatsapp}}</a>
       </div>
       <div class="stats">{{#each stats}}

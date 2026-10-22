@@ -4,19 +4,8 @@
       <h2>{{work.title}}</h2>
       <p>{{work.intro}}</p>
     </div>
-
-    {{#with cases.dikirnis}}{{> sections/cases/dikirnis}}{{/with}}
-
-    {{#with cases.primeSource}}{{> sections/cases/prime-source}}{{/with}}
-
-    {{#with cases.miqat}}{{> sections/cases/miqat}}{{/with}}
-
-    {{#with cases.reposphere}}{{> sections/cases/reposphere}}{{/with}}
-
-    <div class="sub-head reveal">
-      <div><span class="label">{{work.allLabel}}</span><h3>{{work.allTitle}}</h3></div>
+    <div class="featured">{{#each featured}}
+      {{> partials/feature-card}}{{/each}}
     </div>
-    <div class="filters reveal" id="filters" role="group" aria-label="{{work.filtersLabel}}"></div>
-    <div class="grid" id="projects" style="margin-top:20px"></div>
-    <p class="note" style="margin-top:16px">{{work.note}}</p>
+    <p class="more-link reveal"><a class="btn" href="{{page.projectsHref}}">{{work.allLink}} ({{projects.length}})</a></p>
   </section>

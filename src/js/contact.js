@@ -19,7 +19,7 @@
 
   /* Contact form: builds an email or WhatsApp message */
   var form = document.getElementById('contactForm'), note = document.getElementById('formNote');
-  form.addEventListener('submit', function (e) {
+  if (form) form.addEventListener('submit', function (e) {
     e.preventDefault();
     var via = (e.submitter && e.submitter.getAttribute('data-via')) || 'email';
     var name = form.name.value.trim(), email = form.email.value.trim(), subject = form.subject.value.trim(), msg = form.message.value.trim();

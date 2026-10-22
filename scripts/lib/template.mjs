@@ -9,6 +9,7 @@
 //   {{#each path}}..{{/each}}     {{@index}}, {{@first}}, {{@last}}, {{this}}
 //   {{#with path}}..{{/with}}
 //   {{> folder/name}}     include src/templates/folder/name.html
+//   {{> *path}}           same, with the partial name taken from data (e.g. the case-study template of a page)
 //   {{! comment }}
 //
 // A name is looked up on the current item only (inside #each/#with that is the item, otherwise the page).
@@ -50,8 +51,8 @@ function parse(src, name) {
     } else if ((t = /^\/(if|each|with)$/.exec(body))) {
       const n = stack.pop();
       if (!n || n.type !== t[1]) throw new TemplateError(`Unexpected {{/${t[1]}}} at ${at}`);
-    } else if ((t = /^>\s*(\S+)$/.exec(body))) {
-      target().push({ type: 'partial', name: t[1], at });
+    } else if ((t = /^>\s*(\*?)(\S+)$/.exec(body))) {
+      target().push({ type: 'partial', name: t[2], dynamic: t[1] === '*', at });
     } else if ((t = /^@json\s+(\S+)$/.exec(body))) {
       target().push({ type: 'json', path: t[1], at });
     } else if ((t = /^svg\s+(\S+)$/.exec(body))) {
@@ -163,8 +164,9 @@ export function createEngine({ partials, icons }) {
           break;
         }
         case 'partial': {
-          if (!(n.name in partials)) throw new TemplateError(`No partial "${n.name}" at ${n.at}`);
-          out += render(ast(n.name, partials[n.name]), scopes, depth + 1);
+          const name = n.dynamic ? resolve(scopes, n.name, n.at, { strict: true }) : n.name;
+          if (!(name in partials)) throw new TemplateError(`No partial "${name}" at ${n.at}`);
+          out += render(ast(name, partials[name]), scopes, depth + 1);
           break;
         }
       }

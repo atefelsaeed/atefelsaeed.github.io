@@ -3,6 +3,10 @@
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var T = window.SITE || {};
 
+  /* Old links like /#reposphere pointed at case studies that now have their own pages. */
+  var wanted = location.hash.slice(1);
+  if (wanted && T.cases && T.cases[wanted] && !document.getElementById(wanted)) { location.replace(T.cases[wanted]); return; }
+
   /* Mobile menu */
   var menuBtn = document.getElementById('menuBtn'), navLinks = document.getElementById('navLinks');
   menuBtn.addEventListener('click', function () {
@@ -14,7 +18,7 @@
   /* Rotating hero text */
   var words = T.words || ['fintech products'];
   var rot = document.getElementById('rotText');
-  if (!reduce) {
+  if (rot && !reduce) {
     var wi = 0, ci = words[0].length, deleting = true;
     setTimeout(function tick() {
       var w = words[wi];
@@ -34,7 +38,7 @@
   }
   function auto() { clearInterval(timer); if (!reduce) timer = setInterval(function () { go((si + 1) % slides.length); }, 4200); }
   dots.forEach(function (d) { d.addEventListener('click', function () { go(+d.getAttribute('data-go')); auto(); }); });
-  auto();
+  if (slides.length) auto();
 
   /* Count-up */
   function countUp(el) {
@@ -75,14 +79,16 @@
   /* Scroll progress, back to top, active nav link */
   var prog = document.getElementById('progress'), toTop = document.getElementById('toTop');
   var navAs = Array.prototype.slice.call(document.querySelectorAll('.nav-links a'));
-  var secs = navAs.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  // Only in-page links (#about) are tracked; on other pages the nav keeps the server-rendered state.
+  var secs = navAs.map(function (a) { var h = a.getAttribute('href'); return h.charAt(0) === '#' ? document.querySelector(h) : null; });
+  var track = secs.some(Boolean);
   function onScroll() {
     var h = document.documentElement.scrollHeight - window.innerHeight;
     prog.style.transform = 'scaleX(' + (h > 0 ? window.scrollY / h : 0) + ')';
     toTop.classList.toggle('on', window.scrollY > 600);
     var cur = 0;
     secs.forEach(function (s, i) { if (s && s.getBoundingClientRect().top < 120) cur = i; });
-    navAs.forEach(function (a, i) { a.classList.toggle('active', i === cur); });
+    if (track) navAs.forEach(function (a, i) { a.classList.toggle('active', i === cur); });
   }
   window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
   toTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); });

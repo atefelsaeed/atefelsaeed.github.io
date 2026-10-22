@@ -16,6 +16,9 @@
     "knowsAbout": ["Flutter", "Dart", "Clean Architecture", "Bloc", "Riverpod", "Firebase", "CI/CD", "Mobile app development"],
     "sameAs": ["https://www.linkedin.com/in/atefelsaeed/", "https://github.com/atefelsaeed", "https://medium.com/@atefelsaid3"]
   },
+  "home": {
+    "featured": ["dikirnis", "sulfah", "miqat", "reposphere"]
+  },
   "files": {
     "cv": "Atef_Elsaeed_CV.pdf",
     "avatar": "atef-sm.jpg",
@@ -62,8 +65,8 @@
   "services": {
     "items": [{ "icon": "mobile" }, { "icon": "bolt" }, { "icon": "layers" }, { "icon": "card" }, { "icon": "bell" }, { "icon": "upload" }]
   },
-  "cases": {
-    "dikirnis": {
+  "cases": [
+    {
       "id": "dikirnis",
       "pkg": "com.dkonline.app",
       "links": [
@@ -78,7 +81,7 @@
         { "src": "assets/shots/dikirnis-pro-analytics.jpg" }
       ]
     },
-    "primeSource": {
+    {
       "id": "prime-source",
       "pkg": "com.almasdaralawal.hajj",
       "links": [
@@ -87,7 +90,7 @@
       ],
       "bars": [{ "w": "100%" }, { "w": "34%", "after": true }]
     },
-    "miqat": {
+    {
       "id": "miqat",
       "pkg": "com.miqat.islamic",
       "links": [
@@ -96,14 +99,14 @@
       ],
       "shots": [{ "src": "assets/shots/miqat-home.jpg" }, { "src": "assets/shots/miqat-quran.jpg" }, { "src": "assets/shots/miqat-mushaf.jpg" }]
     },
-    "reposphere": {
+    {
       "id": "reposphere",
       "pkg": "github.com/atefelsaeed/RepoSphere",
       "links": [{ "url": "https://atefelsaeed.github.io/RepoSphere/" }, { "url": "https://github.com/atefelsaeed/RepoSphere" }],
       "shots": [{ "src": "assets/shots/reposphere-inbox.jpg" }, { "src": "assets/shots/reposphere-detail.jpg" }],
       "stack": "Flutter · Riverpod · GoRouter · Supabase · Sentry · GitHub Actions"
     }
-  },
+  ],
   "skills": {
     "groups": [
       { "pills": ["Flutter", "Dart", "Android", "iOS (Swift basics)"] },

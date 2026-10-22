@@ -4,7 +4,7 @@
 //   npm run dev            (PORT=3000 npm run dev to change the port)
 
 import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import { watch } from 'node:fs';
 import { extname, join, normalize, sep } from 'node:path';
 import { build, ROOT } from './build.mjs';
@@ -48,6 +48,12 @@ createServer(async (req, res) => {
   };
   try {
     if (file !== DIST && !file.startsWith(DIST + sep)) throw new Error('outside dist');
+    if ((await stat(file)).isDirectory()) {
+      // GitHub Pages sends /projects to /projects/
+      res.writeHead(301, { location: `${path}/` });
+      res.end();
+      return;
+    }
     await send(file, 200);
   } catch {
     await send(join(DIST, '404.html'), 404).catch(() => {

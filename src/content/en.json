@@ -1,5 +1,5 @@
 {
-  "page": { "code": "en", "dir": "ltr", "file": "index.html", "name": "EN" },
+  "page": { "code": "en", "dir": "ltr", "file": "index.html", "name": "EN", "base": "", "home": "/" },
   "rtl": false,
   "meta": {
     "title": "Atef Elsaeed | Senior Flutter Developer",
@@ -159,22 +159,38 @@
   },
   "work": {
     "label": "Projects",
-    "title": "Featured case studies",
-    "intro": "Four projects, four different problems: a product I built alone, a big app I made 65% smaller, a personal app I keep improving, and an open-source tool you can read line by line.",
-    "allLabel": "All projects",
-    "allTitle": "More apps I've worked on",
+    "title": "Selected work",
+    "intro": "Four apps that show how I work, from a fintech app with 500K+ downloads to an open-source tool you can read line by line.",
+    "allLink": "See all projects"
+  },
+  "projectsPage": {
+    "seoTitle": "Flutter projects | Atef Elsaeed",
+    "seoDescription": "Apps I have built or led as a Senior Flutter Developer: fintech, government, religious, e-commerce and more, with store links and case studies.",
+    "label": "Projects",
+    "title": "All projects",
+    "intro": "Apps I have built or led, from fintech to government. Some have a full case study; the rest show my part in a few lines.",
     "filtersLabel": "Filter projects by industry",
     "note": "Client and company apps are private code, so cards describe my part rather than linking to a repository."
   },
-  "cases": {
-    "dikirnis": {
+  "projectPage": {
+    "breadcrumb": "Breadcrumb",
+    "home": "Home",
+    "projects": "Projects",
+    "back": "All projects",
+    "ctaTitle": "Need an app like this?",
+    "ctaText": "I'm open to senior Flutter roles and selected freelance projects.",
+    "ctaButton": "Get in touch"
+  },
+  "cases": [
+    {
+      "id": "dikirnis",
+      "seo": { "title": "Dikirnis On case study: a local super-app in Flutter | Atef Elsaeed", "description": "How I built Dikirnis On alone: a Flutter super-app with 10+ sectors, 2,500+ users and 500+ businesses in 5 months, using one data-driven listing UI." },
       "tag": "Co-founder · sole mobile developer",
       "title": "Dikirnis On",
       "summary": [
         { "dt": "Context", "dd": "A local super-app for Dikirnis, Egypt. One place for 10+ sectors: doctors and clinic bookings, jobs, a buy-and-sell market, stores and offers, home and car services, education, sports, restaurant ordering and local news. A second app, Dikirnis On Pro, lets businesses run their own store." },
         { "dt": "Result", "dd": "2,500+ users and 500+ registered businesses within 5 months of the May 2026 launch." }
       ],
-      "moreLabel": "Full case study",
       "more": [
         { "dt": "My role", "dd": "Co-founder and the only mobile developer. I built both apps with Flutter, Bloc and go_router, integrated with a .NET REST API, and handle every store release." },
         { "dt": "Key decision", "dd": "Most sectors are listings, so I built one data-driven listing UI instead of a screen per sector. Categories nest to any depth. When the team adds or reorders a sector in the dashboard, it appears in the app right away, with no new release. Features with their own logic (jobs, the market, bookings) are separate modules." }
@@ -192,14 +208,15 @@
       ],
       "note": "Illustrative tree. The app renders whatever depth and order the API returns, so a new sector needs no app update."
     },
-    "primeSource": {
+    {
+      "id": "prime-source",
+      "seo": { "title": "Prime Source case study: Hajj app cut from 250 to 85 MB | Atef Elsaeed", "description": "A Hajj operations app for five user roles had grown to 250 MB. Re-architecting it and removing duplicate assets and dead code made the download 65% smaller." },
       "tag": "Performance & re-architecture",
       "title": "Al-Masdar Al-Awal · Prime Source",
       "summary": [
         { "dt": "Context", "dd": "An operations app for organizing Hajj: pilgrim housing, transport and on-site coordination, plus Quran, Athkar and Duas. Five kinds of users share one app, each with their own job." },
         { "dt": "Result", "dd": "From 250 MB to 85 MB, a 65% smaller download for pilgrims who often install it on mobile data." }
       ],
-      "moreLabel": "Full case study",
       "more": [
         { "dt": "The problem", "dd": "The app had grown to 250 MB. It carried many font files, duplicated images and assets, a lot of dead code, unused packages, and an architecture that made every change harder." },
         { "dt": "What we did", "dd": "Re-structured the whole app, removed duplicate fonts and images, dead code and unused dependencies, then shipped a redesign with new features and performance improvements." }
@@ -211,14 +228,15 @@
       "rolesLabel": "Five roles in one app",
       "roles": ["Pilgrim", "Supervisor", "Sheikh", "Doctor", "Barber"]
     },
-    "miqat": {
+    {
+      "id": "miqat",
+      "seo": { "title": "Miqat case study: a free, ad-free Islamic app in Flutter | Atef Elsaeed", "description": "Miqat is an all-in-one Islamic companion I build and maintain alone: prayer times with Adhan notifications, a Tajweed Mushaf, Quran audio and more." },
       "tag": "Personal project · solo",
       "title": "Miqat",
       "summary": [
         { "dt": "Context", "dd": "An all-in-one Islamic companion app. I built it on my own as a free, ad-free charity project, and I keep developing it." },
         { "dt": "What it shows", "dd": "Running a feature-rich app alone, from scheduling Adhan notifications to playing Quran recitation by several reciters, while keeping many modules consistent in one codebase." }
       ],
-      "moreLabel": "Full case study",
       "more": [
         { "dt": "My role", "dd": "Everything: product decisions, design, Flutter development, audio, notifications and store releases on both platforms." }
       ],
@@ -236,14 +254,15 @@
         { "t": "Hijri calendar", "d": "key dates" }
       ]
     },
-    "reposphere": {
+    {
+      "id": "reposphere",
+      "seo": { "title": "RepoSphere case study: one inbox for all your Git work | Atef Elsaeed", "description": "RepoSphere is an open-source Flutter dashboard for GitHub, GitLab, Azure DevOps and Gitea. Clean Architecture, Riverpod, one repository per provider, CI on every push." },
       "tag": "Open source · live demo · in active development",
       "title": "RepoSphere",
       "summary": [
         { "dt": "Context", "dd": "A unified dashboard for developers who work across many repositories on more than one Git provider. Repos, commits, pull requests, issues, releases, notifications and gists from GitHub, GitLab, Azure DevOps and Gitea in one place, instead of switching between tabs and accounts." },
         { "dt": "Technical decisions", "dd": "Clean Architecture with domain, data and presentation layers, Riverpod for state and GoRouter for navigation. Each provider has its own data source behind one repository, so GitLab was added without touching the screens. GitHub sign-in uses the OAuth Device Flow, tokens live in secure storage, and an expired token anywhere in the app logs the user out through one global observer." }
       ],
-      "moreLabel": "Full case study",
       "more": [
         { "dt": "My role", "dd": "Built solo and open source, from the product spec and design system to the code. Flutter, web-first, with the same codebase targeting Android, iOS, macOS, Windows and Linux." },
         { "dt": "Quality", "dd": "GitHub Actions runs static analysis, tests and a web build on every push. Sentry for crash reporting. Work is planned in sprints and documented in the repository." },
@@ -264,7 +283,7 @@
         { "t": "Notifications", "d": "unread count, mark read" }
       ]
     }
-  },
+  ],
   "skills": {
     "label": "Skills",
     "title": "What I work with",
@@ -319,6 +338,7 @@
     "words": ["fintech products", "local super-apps", "government services", "Hajj operations", "e-commerce apps"],
     "strings": {
       "platforms": "Android · iOS",
+      "caseStudy": "Case study",
       "copied": "Copied",
       "copyFallback": "Press Ctrl+C to copy",
       "needName": "Add your name so I know who to reply to.",
@@ -331,7 +351,7 @@
   },
   "projects": [
     { "id": "reposphere", "n": "RepoSphere", "c": "Open source", "d": "One dashboard for GitHub, GitLab, Azure DevOps and Gitea repos, PRs, issues and notifications. Flutter web-first, Clean Architecture, Riverpod, CI.", "m": "In active development", "links": [{ "label": "Live demo" }, null] },
-    { "id": "qsalary", "n": "QSalary", "c": "Fintech", "d": "Earned wage access app. Led development of financial flows, authentication and deep linking.", "m": "40K+ downloads" },
+    { "id": "qsalary", "n": "QSalary", "c": "Fintech", "d": "Earned wage access app. Led development of financial flows, authentication and deep linking.", "m": "40K+ downloads · no longer on the stores" },
     { "id": "sulfah", "n": "Sulfah", "c": "Fintech", "d": "Lending app. Built iOS Live Activities, deep linking, secure auth and improved onboarding.", "m": "500K+ downloads" },
     { "id": "dikirnis", "n": "Dikirnis On", "c": "Super-app", "d": "Local super-app with 10+ sectors, bookings, jobs and a market. Co-founder and sole mobile developer.", "m": "2,500+ users" },
     { "id": "dikirnis-pro", "n": "Dikirnis On Pro", "c": "Super-app", "d": "Merchant app: store management, products and offers, orders, analytics, QR codes and job postings." },

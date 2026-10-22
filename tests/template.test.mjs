@@ -38,6 +38,12 @@ test('#with narrows the context; partials see the current context', () => {
   assert.equal(render('{{#with a}}{{> p/item}}{{/with}}', { a: { t: 'x' } }, partials), '<x>');
 });
 
+test('{{> *path}} picks the partial from data', () => {
+  const partials = { 'a/one': '[{{t}}]', 'a/two': '({{t}})' };
+  assert.equal(render('{{#each l}}{{> *p}}{{/each}}', { l: [{ p: 'a/one', t: 'x' }, { p: 'a/two', t: 'y' }] }, partials), '[x](y)');
+  assert.throws(() => render('{{> *p}}', { p: 'nope' }, partials), /No partial "nope"/);
+});
+
 test('partials can call themselves, with a depth limit', () => {
   const partials = { node: '({{t}}{{#if c}}{{#each c}}{{> node}}{{/each}}{{/if}})' };
   assert.equal(render('{{> node}}', { t: 'a', c: [{ t: 'b', c: [{ t: 'c' }] }] }, partials), '(a(b(c)))');

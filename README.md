@@ -26,18 +26,30 @@ src/
     en.json          English text
     ar.json          Arabic text
   templates/
-    layout.html      <head>, page frame and scripts, written once for all languages
-    sections/        hero, about, services, experience, work (+ cases/), skills, blog, contact
-    partials/        nav, footer, job, tree, case-body
+    layout.html      <head>, page frame and scripts, written once for every page
+    pages/           home.html, projects.html (the full list), project.html (one case study)
+    sections/        the home page sections: hero, about, services, experience, work, skills, blog, contact
+    cases/           the side panel of each case study (screenshots, trees, modules), one file per case id
+    partials/        nav, footer, job, tree, case-body, project cards and links
     icons/           inline SVG icons
   css/               tokens.css (colors, themes) · base.css (reset, nav, buttons) · main.css (sections, responsive, RTL)
   js/                theme.js · projects.js · contact.js · main.js (menu, hero, scroll effects)
-public/              copied to the site root unchanged: images, CV, favicon, og-image, robots, sitemap, 404
+public/              copied to the site root unchanged: images, CV, favicon, og-image, robots, 404
 scripts/             build.mjs (the build) · serve.mjs (dev server) · lib/template.mjs (template engine)
 tests/               node:test checks that run before every deploy
 ```
 
-Output goes to `dist/` (not committed). CSS and JS are concatenated in the order listed in `scripts/build.mjs`.
+Output goes to `dist/` (not committed), including a generated `sitemap.xml`. CSS and JS are concatenated in the order listed in `scripts/build.mjs`.
+
+### Pages
+
+| Page | English | Arabic | Content |
+| --- | --- | --- | --- |
+| Home | `/` | `/ar.html` | Hero, about, services, experience, four featured projects, skills, blog, contact |
+| All projects | `/projects/` | `/ar/projects/` | Every project as a card (rendered at build time), with the industry filter |
+| Case study | `/projects/<id>/` | `/ar/projects/<id>/` | One page per entry in `cases` |
+
+Every page knows its translation: the language button, `hreflang` links and the sitemap are generated from that.
 
 ### Commands
 
@@ -62,10 +74,12 @@ npm test        # build into a temp folder and check it
 ### Everyday changes
 
 - **Edit text:** change it in `en.json` and `ar.json`. A test fails if one language has keys the other lacks.
-- **Add a project to the "more apps" grid:** add `{ "id": "my-app", "links": [...] }` to `projects` in `shared.json`, and `{ "id": "my-app", "n", "c", "d", "m" }` at the same position in both language files.
+- **Add a project to the list:** add `{ "id": "my-app", "links": [...] }` to `projects` in `shared.json`, and `{ "id": "my-app", "n", "c", "d", "m" }` at the same position in both language files. It shows up on `/projects/` automatically.
+- **Change the featured projects on the home page:** edit `home.featured` in `shared.json` (project ids, in display order).
+- **Add a case-study page:** add an entry to `cases` in `shared.json` (id, package name, store links, screenshots) and in both language files (text, `seo.title`, `seo.description`), plus the side panel `src/templates/cases/<id>.html`. Use the same id as the project, and its card on `/projects/` and on the home page gets a "Case study" link by itself.
 - **Add a job:** add an object to `experience.jobs` in both language files.
 - **Add a screenshot:** put the image in `public/assets/shots/`, then add `{ "src": ... }` to the case's `shots` in `shared.json` and `{ "alt": ... }` in both language files.
-- **Add a language:** copy `en.json` to `<code>.json` and translate it, add the code to `LANGUAGES` in `scripts/build.mjs`, add the stylesheet rules for it if it is right-to-left, and list the new page in `public/sitemap.xml` (a test fails if it is missing). The language button in the nav links to one other language, so with three or more languages `partials/nav.html` needs a small switcher.
+- **Add a language:** copy `en.json` to `<code>.json` and translate it, add the code to `LANGUAGES` in `scripts/build.mjs`, and add the stylesheet rules for it if it is right-to-left. The sitemap and `hreflang` links follow by themselves. The language button in the nav links to one other language, so with three or more languages `partials/nav.html` needs a small switcher.
 
 ### Template syntax
 
@@ -77,6 +91,7 @@ npm test        # build into a temp folder and check it
 | `{{#each path}}…{{/each}}` | Loop. Inside: `{{this}}`, `{{@index}}`, `{{@first}}`, `{{@last}}` |
 | `{{#with path}}…{{/with}}` | Narrow the context to one object |
 | `{{> folder/name}}` | Include `src/templates/folder/name.html` |
+| `{{> *path}}` | Include the partial whose name is stored in the data at `path` |
 | `{{svg "moon"}}` or `{{svg icon}}` | Inline `src/templates/icons/moon.svg` |
 | `{{@json path}}` | JSON that is safe inside `<script>` |
 | `{{@root.path}}` | Page-level data from inside a loop, for example `{{#if @root.rtl}}` |
