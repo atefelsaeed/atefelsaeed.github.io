@@ -377,3 +377,7 @@ section.page { padding-top: 40px; }
 .sub-title { margin: 40px 0 16px; font-size: 1.25rem; font-weight: 700; }
 .sec-head + .sub-title { margin-top: 0; }
 .more-link .btn + .btn { margin-inline-start: 8px; }
+
+/* Wide (desktop or web) screenshots are stacked instead of side by side */
+.shots.stack { grid-auto-flow: row; grid-auto-columns: auto; }
+.shots.stack img { border-radius: 10px; }

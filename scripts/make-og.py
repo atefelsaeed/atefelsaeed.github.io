@@ -87,10 +87,21 @@ def rounded(img, radius):
 def make(case, title, shot):
     img = background().convert("RGBA")
     d = ImageDraw.Draw(img)
-    text_w = 640 if shot or case["id"] in MARKS else 1000
+    text_w = 640 if shot or case["id"] in MARKS else 1000  # narrowed below for wide screenshots
 
+    wide = False
     if shot:
         s = Image.open(os.path.join(ROOT, "public", shot)).convert("RGBA")
+        wide = s.width > s.height
+    if shot and wide:
+        text_w = 480
+        w = 560
+        s = s.resize((w, int(s.height * w / s.width)))
+        frame = Image.new("RGBA", (w + 12, s.height + 12), (0, 0, 0, 0))
+        ImageDraw.Draw(frame).rounded_rectangle((0, 0, w + 11, s.height + 11), 16, fill=(2, 6, 13, 255), outline=(60, 80, 110, 255), width=2)
+        frame.paste(rounded(s, 12), (6, 6), s)
+        img.alpha_composite(frame, (610, 150))
+    elif shot:
         w = 330
         s = s.resize((w, int(s.height * w / s.width)))
         frame = Image.new("RGBA", (w + 16, 640), (255, 255, 255, 0))

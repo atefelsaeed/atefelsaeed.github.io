@@ -318,6 +318,11 @@
         { "dt": "Next", "dd": "Still open: Egyptian e-invoicing (ETA), which waits for a real customer; push-notification setup; and testing receipt printing and camera barcode scanning on real devices." }
       ],
       "asideLabel": "How Belmally is put together",
+      "shots": [
+        { "alt": "Belmally dashboard: month sales, cash, top products and payment methods" },
+        { "alt": "Belmally journal entries posted automatically from sales invoices" },
+        { "alt": "Belmally customers with balances, credit limits and loyalty points" }
+      ],
       "appsLabel": "Four apps, one API",
       "apps": [
         { "t": "API", "d": "NestJS · TypeORM · PostgreSQL" },
@@ -332,7 +337,7 @@
         { "t": "Industry", "d": "manufacturing, batch and expiry, devices and warranty, installments, maintenance" },
         { "t": "Enterprise", "d": "approvals, CRM, multi-branch, an AI assistant" }
       ],
-      "note": "The code is private, so this page shows the design rather than linking to a repository."
+      "note": "The code is private, so this page shows the design rather than linking to a repository. The screenshots use demo data."
     },
     {
       "id": "xprinter",

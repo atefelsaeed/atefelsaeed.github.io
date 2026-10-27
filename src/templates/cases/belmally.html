@@ -1,6 +1,7 @@
     <article class="case" id="{{id}}">
       {{> partials/case-body}}
       <aside class="panel" aria-label="{{asideLabel}}">
+        <div class="shots stack">{{#each shots}}<img src="/{{src}}" alt="{{alt}}" width="{{w}}" height="{{h}}" loading="lazy">{{/each}}</div>
         <span class="label">{{appsLabel}}</span>
         <div class="modules">{{#each apps}}
           <div class="module">{{t}}<small>{{d}}</small></div>{{/each}}
