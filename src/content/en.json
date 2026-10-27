@@ -80,12 +80,12 @@
     "portraitAlt": "Portrait of Atef Elsaeed",
     "badges": [
       { "b": "5+ yrs", "s": "Flutter in production" },
-      { "b": "2× founder", "s": "Adrenaline · Dikirnis On" }
+      { "b": "3× founder", "s": "Adrenaline · Dikirnis On · Belmally" }
     ],
     "paras": [
       "I'm <strong>Atef Elsaeed</strong>, a Senior Flutter Developer based in Cairo. Since 2021 I've built and maintained mobile apps for fintech companies, government bodies and consumer products, including a lending app with <strong>500K+ downloads</strong>.",
       "I like owning the whole path: architecture, development, testing and the release to App Store and Google Play. I care about apps that stay fast and stable as they grow, and I once made a large Hajj app <strong>65% smaller</strong> by rebuilding its structure.",
-      "Outside my day job I co-founded two products. I lead the tech team at <strong>Adrenaline Platform</strong>, and I'm the only mobile developer behind <strong>Dikirnis On</strong>, a local super-app that reached 2,500+ users in its first five months."
+      "Outside my day job I run three products. I lead the tech team at <strong>Adrenaline Platform</strong>, I'm the only mobile developer behind <strong>Dikirnis On</strong>, a local super-app that reached 2,500+ users in its first five months, and I'm building <strong>Belmally</strong>, a multi-tenant ERP, on my own."
     ],
     "hl": [
       { "t": "Flutter & Dart", "d": "Production apps on Android and iOS from one codebase." },
