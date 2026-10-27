@@ -47,10 +47,10 @@
       { "id": "top" },
       { "id": "about" },
       { "id": "services" },
-      { "id": "experience" },
-      { "id": "work" },
+      { "id": "experience", "page": "experience" },
+      { "id": "work", "page": "projects" },
       { "id": "skills" },
-      { "id": "blog" },
+      { "id": "blog", "page": "blog" },
       { "id": "contact" }
     ]
   },

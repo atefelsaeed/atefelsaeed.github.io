@@ -5,9 +5,7 @@
       <p>{{experience.intro}}</p>
     </div>
     <div class="timeline">{{#each experience.jobs}}
-      {{> partials/job}}{{/each}}
-      <details class="more earlier"><summary>{{experience.earlierLabel}}</summary>{{#each experience.earlier}}
-      {{> partials/job}}{{/each}}
-      </details>
+      {{#if current}}{{> partials/job}}{{else}}{{> partials/job-compact}}{{/if}}{{/each}}
     </div>
+    <p class="more-link reveal"><a class="btn" href="{{page.experienceHref}}">{{experience.allLink}}</a></p>
   </section>

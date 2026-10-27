@@ -1,0 +1,12 @@
+  <section class="page">
+    <div class="crumbs" role="navigation" aria-label="{{projectPage.breadcrumb}}"><a href="{{page.home}}">{{projectPage.home}}</a><span aria-hidden="true">/</span><span aria-current="page">{{blog.label}}</span></div>
+    <div class="sec-head">
+      <h1>{{blog.title}}</h1>
+      <p>{{blog.intro}}</p>
+    </div>
+    <h2 class="sr-only">{{blogPage.listLabel}}</h2>
+    <div class="posts">{{#each blog.posts}}
+      {{> partials/post}}{{/each}}
+    </div>
+    <div style="margin-top:24px"><a class="btn" href="{{blog.medium}}" target="_blank" rel="noopener">{{blog.allLabel}}</a></div>
+  </section>

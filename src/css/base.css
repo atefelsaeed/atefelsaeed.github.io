@@ -19,7 +19,7 @@ nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; backgro
 nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 700; font-size: 0.95rem; color: var(--fg); }
 .brand:hover { text-decoration: none; }
-.mark { width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; font-size: 0.78rem; letter-spacing: 0.02em; }
+.mark { width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: var(--on-accent); font-size: 0.78rem; letter-spacing: 0.02em; }
 .nav-links { list-style: none; display: flex; gap: 4px; margin: 0; padding: 0; }
 .nav-links a { display: block; padding: 6px 10px; border-radius: 8px; color: var(--muted); font-size: 0.9rem; transition: color .2s, background .2s; }
 .nav-links a:hover, .nav-links a.active { color: var(--fg); background: var(--accent-soft); text-decoration: none; }
@@ -29,7 +29,7 @@ nav .wrap { display: flex; align-items: center; justify-content: space-between; 
 .menu-btn { display: none; }
 .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 10px; font-weight: 600; font-size: 0.95rem; border: 1px solid var(--line); color: var(--fg); background: var(--surface); transition: transform .2s, box-shadow .2s, filter .2s; }
 .btn:hover { text-decoration: none; transform: translateY(-2px); box-shadow: 0 8px 20px -10px color-mix(in srgb, var(--accent) 60%, transparent); }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-.btn.wa { background: var(--wa); border-color: var(--wa); color: #fff; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.wa { background: var(--wa); border-color: var(--wa); color: var(--on-wa); }
 .btn.small { padding: 8px 14px; font-size: 0.88rem; }
 

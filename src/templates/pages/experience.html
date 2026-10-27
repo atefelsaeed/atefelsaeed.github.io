@@ -1,0 +1,16 @@
+  <section class="page">
+    <div class="crumbs" role="navigation" aria-label="{{projectPage.breadcrumb}}"><a href="{{page.home}}">{{projectPage.home}}</a><span aria-hidden="true">/</span><span aria-current="page">{{experience.label}}</span></div>
+    <div class="sec-head">
+      <h1>{{experience.title}}</h1>
+      <p>{{experience.intro}}</p>
+    </div>
+    <h2 class="sub-title">{{experiencePage.rolesLabel}}</h2>
+    <div class="timeline">{{#each experience.jobs}}
+      {{> partials/job}}{{/each}}
+    </div>
+    <h2 class="sub-title">{{experience.earlierLabel}}</h2>
+    <div class="timeline">{{#each experience.earlier}}
+      {{> partials/job}}{{/each}}
+    </div>
+    <p class="more-link"><a class="btn" href="{{page.home}}#contact">{{projectPage.ctaButton}}</a> <a class="btn" href="/{{files.cv}}" target="_blank" rel="noopener">{{hero.downloadCv}}</a></p>
+  </section>

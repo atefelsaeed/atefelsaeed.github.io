@@ -118,7 +118,8 @@
   "experience": {
     "label": "Experience",
     "title": "Where I've worked",
-    "intro": "Full-time roles, part-time roles, and the two companies I co-founded.",
+    "intro": "Full-time roles, part-time roles, and the products I co-founded or started.",
+    "allLink": "Full experience",
     "jobs": [
       {
         "current": true, "when": "May 2026 – now", "role": "Senior Flutter Developer", "org": "Vision Dimensions", "kind": "Part-time",
@@ -176,6 +177,16 @@
     "intro": "Apps I have built or led, from fintech to government. Some have a full case study; the rest show my part in a few lines.",
     "filtersLabel": "Filter projects by industry",
     "note": "Client and company apps are private code, so cards describe my part rather than linking to a repository."
+  },
+  "experiencePage": {
+    "seoTitle": "Experience | Atef Elsaeed, Senior Flutter Developer",
+    "seoDescription": "Flutter roles since 2021 at Vision Dimensions, Recapet, Sulfah, GatePlus and more, plus the products I founded: Belmally ERP, Dikirnis On and Adrenaline Platform.",
+    "rolesLabel": "Roles and ventures"
+  },
+  "blogPage": {
+    "seoTitle": "Flutter articles | Atef Elsaeed",
+    "seoDescription": "Articles on Flutter performance, Dart internals and everyday Flutter problems: tree shaking, const, compile time vs run time, navigation tracking and more.",
+    "listLabel": "All articles"
   },
   "projectPage": {
     "breadcrumb": "Breadcrumb",
@@ -360,6 +371,7 @@
     "title": "Articles on Flutter",
     "intro": "Notes from real work on performance, Dart internals and everyday Flutter problems.",
     "readLabel": "Read on Medium",
+    "allLink": "See all articles",
     "allLabel": "All 10 articles on Medium",
     "posts": [
       { "tag": "App size", "date": "Aug 2024", "desc": "How Flutter removes unused code at build time, and how to help it shrink your app." },

@@ -39,6 +39,8 @@ test('every language gets a home page, a projects page and one page per case stu
   for (const code of ['en', 'ar']) {
     assert.equal(ofKind(code, 'home').length, 1);
     assert.equal(ofKind(code, 'projects').length, 1);
+    assert.equal(ofKind(code, 'experience').length, 1);
+    assert.equal(ofKind(code, 'blog').length, 1);
     assert.equal(ofKind(code, 'project').length, shared.cases.length);
   }
   assert.deepEqual(
@@ -227,6 +229,34 @@ test('projects page: every project is a pre-rendered card, and case studies are 
     assert.equal(filterCounts.slice(1).reduce((a, b) => a + b, 0), total, 'category counts add up');
     for (const study of ofKind(code, 'project')) assert.ok(list.html.includes(`class="card-link" href="${study.href}"`), `${code}: ${study.href} is linked from its card title`);
     assert.equal((list.html.match(/class="card-link"/g) || []).length, shared.cases.length);
+  }
+});
+
+test('experience: home shows current roles in full and past roles in one line; /experience/ has everything', async () => {
+  for (const code of ['en', 'ar']) {
+    const content = JSON.parse(await readFile(join(ROOT, `src/content/${code}.json`), 'utf8')).experience;
+    const [home] = ofKind(code, 'home');
+    const [page] = ofKind(code, 'experience');
+    const current = content.jobs.filter((j) => j.current).length;
+    const section = /<section id="experience">[\s\S]*?<\/section>/.exec(home.html)[0];
+    assert.equal((section.match(/class="job[ "]/g) || []).length, content.jobs.length, `${code}: every employer is still on the home page`);
+    assert.equal((section.match(/<ul>/g) || []).length, current, `${code}: only current roles list their bullets on the home page`);
+    assert.ok(section.includes(`href="${page.href}"`), `${code}: home links to the full experience`);
+    assert.equal((page.html.match(/class="job[ "]/g) || []).length, content.jobs.length + content.earlier.length, `${code}: /experience/ lists every role`);
+    assert.equal((page.html.match(/<ul>/g) || []).length, content.jobs.length + content.earlier.length, `${code}: with its bullets`);
+    assert.match(page.html, /class="active"[^>]*>[^<]*<\/a>/, `${code}: Experience is the current nav item`);
+  }
+});
+
+test('blog: home shows three articles and links to /blog/, which lists every article', () => {
+  for (const code of ['en', 'ar']) {
+    const [home] = ofKind(code, 'home');
+    const [page] = ofKind(code, 'blog');
+    const section = /<section id="blog">[\s\S]*?<\/section>/.exec(home.html)[0];
+    assert.equal((section.match(/class="post reveal"/g) || []).length, 3, `${code}: three posts on the home page`);
+    assert.ok(section.includes(`href="${page.href}"`), `${code}: home links to all articles`);
+    assert.equal((page.html.match(/class="post reveal"/g) || []).length, shared.blog.posts.length, `${code}: /blog/ lists every article`);
+    for (const post of shared.blog.posts) assert.ok(page.html.includes(`href="${post.url}"`), `${code}: ${post.title}`);
   }
 });
 

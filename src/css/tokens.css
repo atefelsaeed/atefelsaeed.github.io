@@ -9,7 +9,9 @@
   --accent-2: #12A3C9;
   --accent-soft: #E3EEFB;
   --ok: #0E7C6B;
-  --wa: #1F9D55;
+  --wa: #17803F;
+  --on-accent: #FFFFFF;
+  --on-wa: #FFFFFF;
   --phone: #0F1B2D;
   --screen: #F7F9FC;
   --display: "Unbounded", "Segoe UI", system-ui, sans-serif;
@@ -20,13 +22,13 @@
   :root:not([data-theme="light"]) {
     --bg: #0A111E; --surface: #111A2B; --fg: #E5ECF5; --muted: #93A1B8;
     --line: #223049; --accent: #5AA9FF; --accent-2: #4FD1EE; --accent-soft: #14284A;
-    --ok: #3CC4AE; --wa: #34C26F; --phone: #02060D; --screen: #0F1828;
+    --ok: #3CC4AE; --wa: #34C26F; --on-accent: #06101F; --on-wa: #06101F; --phone: #02060D; --screen: #0F1828;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0A111E; --surface: #111A2B; --fg: #E5ECF5; --muted: #93A1B8;
   --line: #223049; --accent: #5AA9FF; --accent-2: #4FD1EE; --accent-soft: #14284A;
-  --ok: #3CC4AE; --wa: #34C26F; --phone: #02060D; --screen: #0F1828;
+  --ok: #3CC4AE; --wa: #34C26F; --on-accent: #06101F; --on-wa: #06101F; --phone: #02060D; --screen: #0F1828;
   color-scheme: dark;
 }

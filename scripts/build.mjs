@@ -56,6 +56,8 @@ function describePages(data, origin) {
   const pages = [
     { key: 'home', kind: 'home', file },
     { key: 'projects', kind: 'projects', file: `${base}projects/index.html` },
+    { key: 'experience', kind: 'experience', file: `${base}experience/index.html` },
+    { key: 'blog', kind: 'blog', file: `${base}blog/index.html` },
     ...data.cases.map((c) => ({ key: `project:${c.id}`, kind: 'project', slug: c.id, file: `${base}projects/${c.id}/index.html` })),
   ];
   return pages.map((p) => ({ ...p, code: data.page.code, href: hrefOf(p.file), url: origin + hrefOf(p.file) }));
@@ -84,6 +86,7 @@ function languageData(shared, langs, code) {
 
   const counts = new Map();
   for (const p of data.projects) counts.set(p.c, (counts.get(p.c) ?? 0) + 1);
+  data.homePosts = data.blog.posts.slice(0, 3); // the home page shows the first three; /blog/ lists all
   data.categories = [
     { name: data.app.all, count: data.projects.length, active: true },
     ...[...counts].map(([name, count]) => ({ name, count, active: false })),
@@ -98,14 +101,17 @@ function languageData(shared, langs, code) {
   return data;
 }
 
+// The nav item (by its "page") that a page belongs to; case studies belong to Projects.
+const NAV_PAGE = { projects: 'projects', project: 'projects', experience: 'experience', blog: 'blog' };
+
 function navLinks(data, page) {
   return data.nav.links.map((l) => {
     let href;
     if (page.kind === 'home') href = `#${l.id}`;
-    else if (l.id === 'work') href = `/${data.page.base}projects/`;
+    else if (l.page) href = `/${data.page.base}${l.page}/`;
     else if (l.id === 'top') href = data.page.home;
     else href = `${data.page.home}#${l.id}`;
-    return { ...l, href, active: (page.kind === 'projects' || page.kind === 'project') && l.id === 'work' };
+    return { ...l, href, active: Boolean(l.page) && NAV_PAGE[page.kind] === l.page };
   });
 }
 
@@ -113,7 +119,7 @@ function pageContext(data, langs, byKey, page) {
   const ctx = { ...data };
   const alternates = LANGUAGES.map((code) => byKey.get(page.key).get(code));
   const other = alternates.find((a) => a.code !== page.code);
-  ctx.page = { ...data.page, kind: page.kind, url: page.url, href: page.href, indexable: true, projectsHref: `/${data.page.base}projects/`, skip: page.kind === 'home' ? 'about' : 'top' };
+  ctx.page = { ...data.page, kind: page.kind, url: page.url, href: page.href, indexable: true, projectsHref: `/${data.page.base}projects/`, experienceHref: `/${data.page.base}experience/`, blogHref: `/${data.page.base}blog/`, skip: page.kind === 'home' ? 'about' : 'top' };
   ctx.alternates = alternates.map(({ code, url }) => ({ code, url }));
   ctx.defaultUrl = alternates[0].url;
   ctx.otherLang = other ? { code: other.code, name: langs[other.code].page.name, href: other.href } : null;
@@ -123,8 +129,8 @@ function pageContext(data, langs, byKey, page) {
   const defaultImage = `${data.site.origin}/${data.files.ogImage}`;
   if (page.kind === 'home') {
     ctx.seo = { title: data.meta.title, description: data.meta.description, ogTitle: data.meta.ogTitle, ogDescription: data.meta.ogDescription, image: defaultImage };
-  } else if (page.kind === 'projects') {
-    const p = data.projectsPage;
+  } else if (page.kind === 'projects' || page.kind === 'experience' || page.kind === 'blog') {
+    const p = data[`${page.kind}Page`];
     ctx.seo = { title: p.seoTitle, description: p.seoDescription, ogTitle: p.seoTitle, ogDescription: p.seoDescription, image: defaultImage };
   } else {
     const c = data.cases.find((x) => x.id === page.slug);
@@ -142,9 +148,10 @@ function pageContext(data, langs, byKey, page) {
 // BreadcrumbList for search results: Home > Projects > (case study).
 function breadcrumbs(data, page, origin) {
   if (page.kind === 'home') return null;
+  const section = data.nav.links.find((l) => l.page === NAV_PAGE[page.kind]);
   const crumbs = [
     [data.projectPage.home, origin + data.page.home],
-    [data.projectPage.projects, origin + data.page.projectsHref],
+    [section.t, origin + `/${data.page.base}${section.page}/`],
   ];
   if (page.kind === 'project') crumbs.push([data.cases.find((c) => c.id === page.slug).title, page.url]);
   return {
@@ -232,7 +239,7 @@ export async function build({ outDir = join(ROOT, 'dist') } = {}) {
   // 404.html: GitHub Pages serves it for every unknown URL, so it is not tied to one language.
   const home = perLang[LANGUAGES[0]];
   const nf = { ...home };
-  nf.page = { ...home.page, kind: 'notfound', url: `${shared.site.origin}/404.html`, href: '/404.html', projectsHref: '/projects/', skip: 'top' };
+  nf.page = { ...home.page, kind: 'notfound', url: `${shared.site.origin}/404.html`, href: '/404.html', projectsHref: '/projects/', experienceHref: '/experience/', blogHref: '/blog/', skip: 'top' };
   nf.alternates = [];
   const otherCode = LANGUAGES.find((c) => c !== LANGUAGES[0]);
   nf.otherLang = otherCode ? { code: otherCode, name: langs[otherCode].page.name, href: described[otherCode][0].href } : null;
