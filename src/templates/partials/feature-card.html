@@ -1,6 +1,7 @@
 <article class="feature reveal">
+  {{#if thumb}}<div class="thumb"><img src="/{{thumb}}" alt="{{n}}" width="540" height="1082" loading="lazy"></div>{{/if}}
   <div class="card-top"><span class="tag">{{c}}</span>{{#if m}}<span class="metric">{{m}}</span>{{/if}}</div>
-  <h3>{{n}}</h3>
+  <h3>{{#if href}}<a class="card-link" href="{{href}}">{{n}}</a>{{else}}{{n}}{{/if}}</h3>
   <p>{{d}}</p>
   {{> partials/project-links}}
 </article>

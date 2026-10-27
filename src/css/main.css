@@ -344,3 +344,17 @@ section.page { padding-top: 40px; }
   .featured { grid-template-columns: 1fr; }
   section.page { padding-top: 24px; }
 }
+
+/* Clickable project cards: the heading link covers the whole card; store links stay on top of it */
+.feature { position: relative; }
+.card-link { color: inherit; }
+.card-link:hover { color: var(--accent); text-decoration: none; }
+.card-link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.card:has(.card-link), .feature:has(.card-link) { cursor: pointer; }
+.card:has(.card-link:focus-visible), .feature:has(.card-link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+.card .links a, .feature .links a { position: relative; z-index: 1; }
+.go { color: var(--accent); }
+.go::after { content: " \2192"; }
+[dir="rtl"] .go::after { content: " \2190"; }
+.thumb { aspect-ratio: 16 / 10; overflow: hidden; border-radius: 10px; border: 1px solid var(--line); background: var(--screen); }
+.thumb img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }

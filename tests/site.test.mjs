@@ -141,6 +141,8 @@ test('home: four featured projects, each with its links, and a way to the full l
     assert.equal((home.html.match(/<article class="feature/g) || []).length, 4);
     assert.ok(home.html.includes(`href="${ofKind(code, 'projects')[0].href}"`), `${code}: link to all projects`);
     assert.ok(!home.html.includes('id="projects"'), 'the full grid lives on the projects page');
+    assert.equal((home.html.match(/class="card-link"/g) || []).length, 3, `${code}: featured projects with a case study are clickable`);
+    assert.equal((home.html.match(/class="thumb"/g) || []).length, 3, `${code}: thumbnails for projects with screenshots`);
   }
 });
 
@@ -152,7 +154,8 @@ test('projects page: every project is a pre-rendered card, and case studies are 
     const filterCounts = [...list.html.matchAll(/class="n">(\d+)</g)].map((m) => Number(m[1]));
     assert.equal(filterCounts[0], 18);
     assert.equal(filterCounts.slice(1).reduce((a, b) => a + b, 0), 18, 'category counts add up');
-    for (const study of ofKind(code, 'project')) assert.ok(list.html.includes(`href="${study.href}"`), `${code}: ${study.href} is linked from the list`);
+    for (const study of ofKind(code, 'project')) assert.ok(list.html.includes(`class="card-link" href="${study.href}"`), `${code}: ${study.href} is linked from its card title`);
+    assert.equal((list.html.match(/class="card-link"/g) || []).length, 4);
   }
 });
 
