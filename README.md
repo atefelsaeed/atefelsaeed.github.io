@@ -82,6 +82,16 @@ npm test        # build into a temp folder and check it
 - **Add a screenshot:** put the image in `public/assets/shots/`, then add `{ "src": ... }` to the case's `shots` in `shared.json` and `{ "alt": ... }` in both language files.
 - **Add a language:** copy `en.json` to `<code>.json` and translate it, add the code to `LANGUAGES` in `scripts/build.mjs`, and add the stylesheet rules for it if it is right-to-left. The sitemap and `hreflang` links follow by themselves. The language button in the nav links to one other language, so with three or more languages `partials/nav.html` needs a small switcher.
 
+### Images and files
+
+Everything the site serves lives in `public/` and is copied to the site root as is, so the files stay in the repository. They are small (about 2 MB in total), load from the same domain, and a test checks that every image a page uses exists. Do not point pages at Google Drive or other file hosts: the links are not meant to be used as image sources, they can be rate-limited, and social networks will not fetch share images from them.
+
+- **Keep the raw originals outside the repository** (a `raw/` folder next to the project is ignored by git, or a drive of your own). Only the optimized version is committed.
+- **Prepare a screenshot** with `python3 scripts/optimize-image.py raw/dashboard.png belmally-dashboard --width 960` (use `--crop-top` to cut a phone status bar). It writes a JPEG to `public/assets/shots/` and prints the `{ "src", "w", "h" }` entry to paste into `shared.json`. Use a width of about twice the size it is shown at.
+- **Share images** for case studies come from `python3 scripts/make-og.py`.
+- A test fails if an image is over 300 KB or wider than 1200 px (usually an unprocessed original), or if all images together pass 3 MB.
+- For video, embed YouTube or Vimeo rather than adding the file.
+
 ### Template syntax
 
 | Tag | Meaning |
