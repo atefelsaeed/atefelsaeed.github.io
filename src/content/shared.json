@@ -19,6 +19,12 @@
   "home": {
     "featured": ["dikirnis", "sulfah", "belmally", "reposphere"]
   },
+  "notFound": {
+    "seoTitle": "Page not found | Atef Elsaeed",
+    "seoDescription": "This page doesn't exist. Go back to the portfolio or see all projects.",
+    "en": { "label": "Error 404", "title": "This screen isn't in the app.", "text": "The page you opened doesn't exist.", "home": "Back to portfolio", "projects": "All projects" },
+    "ar": { "text": "الصفحة دي مش موجودة.", "home": "النسخة العربية" }
+  },
   "files": {
     "cv": "Atef_Elsaeed_CV.pdf",
     "avatar": "atef-sm.jpg",

@@ -184,6 +184,9 @@
     "back": "All projects",
     "ctaTitle": "Need an app like this?",
     "ctaText": "I'm open to senior Flutter roles and selected freelance projects.",
+    "more": "More case studies",
+    "prev": "Previous case study",
+    "next": "Next case study",
     "ctaButton": "Get in touch"
   },
   "cases": [

@@ -1,6 +1,10 @@
   <section class="page">
     <div class="crumbs" role="navigation" aria-label="{{projectPage.breadcrumb}}"><a href="{{page.home}}">{{projectPage.home}}</a><span aria-hidden="true">/</span><a href="{{page.projectsHref}}">{{projectPage.projects}}</a><span aria-hidden="true">/</span><span aria-current="page">{{case.title}}</span></div>
     {{#with case}}{{> *template}}{{/with}}
+    <div class="case-nav" role="navigation" aria-label="{{projectPage.more}}">
+      <a class="case-nav-link prev" href="{{prevCase.href}}"><span class="label">{{projectPage.prev}}</span><b>{{prevCase.title}}</b></a>
+      <a class="case-nav-link next" href="{{nextCase.href}}"><span class="label">{{projectPage.next}}</span><b>{{nextCase.title}}</b></a>
+    </div>
     <div class="cta-band">
       <div><h2>{{projectPage.ctaTitle}}</h2><p>{{projectPage.ctaText}}</p></div>
       <div class="cta"><a class="btn primary" href="{{page.home}}#contact">{{projectPage.ctaButton}}</a><a class="btn" href="{{page.projectsHref}}">{{projectPage.back}}</a></div>

@@ -12,15 +12,16 @@
 <meta property="og:title" content="{{seo.ogTitle}}">
 <meta property="og:description" content="{{seo.ogDescription}}">
 <meta property="og:url" content="{{page.url}}">
-<meta property="og:image" content="{{site.origin}}/{{files.ogImage}}">
+<meta property="og:image" content="{{seo.image}}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 {{#if meta.ogLocale}}<meta property="og:locale" content="{{meta.ogLocale}}">{{/if}}
 <script type="application/ld+json">{{@json person}}</script>
-<link rel="canonical" href="{{page.url}}">{{#each alternates}}
+{{#if breadcrumbs}}<script type="application/ld+json">{{@json breadcrumbs}}</script>
+{{/if}}{{#if page.indexable}}<link rel="canonical" href="{{page.url}}">{{#each alternates}}
 <link rel="alternate" hreflang="{{code}}" href="{{url}}">{{/each}}
-<link rel="alternate" hreflang="x-default" href="{{defaultUrl}}">
+<link rel="alternate" hreflang="x-default" href="{{defaultUrl}}">{{else}}<meta name="robots" content="noindex">{{/if}}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -103,6 +103,51 @@ test('hreflang points every page at its translation', () => {
   }
 });
 
+test('case studies get their own share image; every other page uses the default one', async () => {
+  for (const p of pages) {
+    const image = meta(p.html, 'property', 'og:image');
+    const expected = p.kind === 'project' ? `${new URL(p.url).origin}/og/${p.key.split(':')[1]}.png` : `${new URL(p.url).origin}/og-image.png`;
+    assert.equal(image, expected, p.file);
+  }
+  for (const c of shared.cases) assert.ok(await exists(join(out, 'og', `${c.id}.png`)), `run: python3 scripts/make-og.py (no og/${c.id}.png)`);
+});
+
+test('BreadcrumbList structured data: Home > Projects > case study, never on the home page', () => {
+  for (const p of pages) {
+    const blocks = [...p.html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]));
+    const crumbs = blocks.find((b) => b['@type'] === 'BreadcrumbList');
+    if (p.kind === 'home') { assert.equal(crumbs, undefined, `${p.file}: no breadcrumbs on the home page`); continue; }
+    const items = crumbs.itemListElement;
+    assert.equal(items.length, p.kind === 'project' ? 3 : 2, p.file);
+    items.forEach((it, i) => assert.equal(it.position, i + 1));
+    assert.equal(items.at(-1).item, p.url, `${p.file}: the last crumb is the page itself`);
+    for (const it of items) assert.ok(byFile.has(fileOf(new URL(it.item).pathname)), `${p.file}: crumb ${it.item} is not a built page`);
+  }
+});
+
+test('case studies link to the previous and next one, and the links form a loop', () => {
+  for (const code of ['en', 'ar']) {
+    const studies = ofKind(code, 'project');
+    studies.forEach((p, i) => {
+      const prev = studies[(i - 1 + studies.length) % studies.length];
+      const next = studies[(i + 1) % studies.length];
+      assert.ok(p.html.includes(`class="case-nav-link prev" href="${prev.href}"`), `${p.file}: previous`);
+      assert.ok(p.html.includes(`class="case-nav-link next" href="${next.href}"`), `${p.file}: next`);
+    });
+  }
+});
+
+test('404.html uses the site layout, is not indexed and leads back to the site', async () => {
+  const html = await read('404.html');
+  assert.match(html, /<meta name="robots" content="noindex">/);
+  assert.ok(!html.includes('rel="canonical"'), 'a 404 page must not declare a canonical URL');
+  assert.match(html, /<link rel="stylesheet" href="\/style\.css">/, 'styled from any folder depth');
+  for (const href of ['/', '/projects/', '/ar.html']) assert.ok(html.includes(`href="${href}"`), `404 links to ${href}`);
+  assert.match(html, /localStorage\.getItem\("ae-theme"\)/, 'applies the saved theme');
+  assert.ok(!html.includes('class="active"'), 'no nav item is marked as the current page');
+  assert.ok(!(await read('sitemap.xml')).includes('404'), '404 is not in the sitemap');
+});
+
 test('ids are unique and every #anchor on a page has a target', () => {
   for (const p of pages) {
     const ids = attrs(p.html, '[a-z0-9]+', 'id');

@@ -105,7 +105,7 @@ function navLinks(data, page) {
     else if (l.id === 'work') href = `/${data.page.base}projects/`;
     else if (l.id === 'top') href = data.page.home;
     else href = `${data.page.home}#${l.id}`;
-    return { ...l, href, active: page.kind !== 'home' && l.id === 'work' };
+    return { ...l, href, active: (page.kind === 'projects' || page.kind === 'project') && l.id === 'work' };
   });
 }
 
@@ -113,24 +113,45 @@ function pageContext(data, langs, byKey, page) {
   const ctx = { ...data };
   const alternates = LANGUAGES.map((code) => byKey.get(page.key).get(code));
   const other = alternates.find((a) => a.code !== page.code);
-  ctx.page = { ...data.page, kind: page.kind, url: page.url, href: page.href, projectsHref: `/${data.page.base}projects/`, skip: page.kind === 'home' ? 'about' : 'top' };
+  ctx.page = { ...data.page, kind: page.kind, url: page.url, href: page.href, indexable: true, projectsHref: `/${data.page.base}projects/`, skip: page.kind === 'home' ? 'about' : 'top' };
   ctx.alternates = alternates.map(({ code, url }) => ({ code, url }));
   ctx.defaultUrl = alternates[0].url;
   ctx.otherLang = other ? { code: other.code, name: langs[other.code].page.name, href: other.href } : null;
   const links = navLinks(data, page);
   ctx.nav = { ...data.nav, links, brandHref: links[0].href, hireHref: page.kind === 'home' ? '#contact' : `${data.page.home}#contact` };
 
+  const defaultImage = `${data.site.origin}/${data.files.ogImage}`;
   if (page.kind === 'home') {
-    ctx.seo = { title: data.meta.title, description: data.meta.description, ogTitle: data.meta.ogTitle, ogDescription: data.meta.ogDescription };
+    ctx.seo = { title: data.meta.title, description: data.meta.description, ogTitle: data.meta.ogTitle, ogDescription: data.meta.ogDescription, image: defaultImage };
   } else if (page.kind === 'projects') {
     const p = data.projectsPage;
-    ctx.seo = { title: p.seoTitle, description: p.seoDescription, ogTitle: p.seoTitle, ogDescription: p.seoDescription };
+    ctx.seo = { title: p.seoTitle, description: p.seoDescription, ogTitle: p.seoTitle, ogDescription: p.seoDescription, image: defaultImage };
   } else {
     const c = data.cases.find((x) => x.id === page.slug);
     ctx.case = { ...c, template: `cases/${c.id}` };
-    ctx.seo = { title: c.seo.title, description: c.seo.description, ogTitle: c.seo.title, ogDescription: c.seo.description };
+    ctx.seo = { title: c.seo.title, description: c.seo.description, ogTitle: c.seo.title, ogDescription: c.seo.description, image: `${data.site.origin}/og/${c.id}.png` };
+    const at = data.cases.indexOf(c);
+    const link = (x) => ({ title: x.title, href: `/${data.page.base}projects/${x.id}/` });
+    ctx.prevCase = link(data.cases[(at - 1 + data.cases.length) % data.cases.length]);
+    ctx.nextCase = link(data.cases[(at + 1) % data.cases.length]);
   }
+  ctx.breadcrumbs = breadcrumbs(ctx, page, data.site.origin);
   return ctx;
+}
+
+// BreadcrumbList for search results: Home > Projects > (case study).
+function breadcrumbs(data, page, origin) {
+  if (page.kind === 'home') return null;
+  const crumbs = [
+    [data.projectPage.home, origin + data.page.home],
+    [data.projectPage.projects, origin + data.page.projectsHref],
+  ];
+  if (page.kind === 'project') crumbs.push([data.cases.find((c) => c.id === page.slug).title, page.url]);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: crumbs.map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })),
+  };
 }
 
 function sitemapXml(groups, lastmod) {
@@ -207,6 +228,20 @@ export async function build({ outDir = join(ROOT, 'dist') } = {}) {
       pages.push({ code, key: page.key, kind: page.kind, file: page.file, href: page.href, url: page.url });
     }
   }
+
+  // 404.html: GitHub Pages serves it for every unknown URL, so it is not tied to one language.
+  const home = perLang[LANGUAGES[0]];
+  const nf = { ...home };
+  nf.page = { ...home.page, kind: 'notfound', url: `${shared.site.origin}/404.html`, href: '/404.html', projectsHref: '/projects/', skip: 'top' };
+  nf.alternates = [];
+  const otherCode = LANGUAGES.find((c) => c !== LANGUAGES[0]);
+  nf.otherLang = otherCode ? { code: otherCode, name: langs[otherCode].page.name, href: described[otherCode][0].href } : null;
+  const nfLinks = navLinks(home, { kind: 'notfound' });
+  nf.nav = { ...home.nav, links: nfLinks, brandHref: nfLinks[0].href, hireHref: `${home.page.home}#contact` };
+  nf.seo = { title: shared.notFound.seoTitle, description: shared.notFound.seoDescription, ogTitle: shared.notFound.seoTitle, ogDescription: shared.notFound.seoDescription, image: `${shared.site.origin}/${shared.files.ogImage}` };
+  nf.breadcrumbs = null;
+  nf.body = engine.renderString(partials['pages/notfound'], nf, 'pages/notfound');
+  await writeFile(join(out, '404.html'), engine.renderString(layout, nf, 'layout').replace(/\n[ \t]*(?=\n)/g, ''));
 
   await writeFile(join(out, 'sitemap.xml'), sitemapXml([...byKey.values()].map((v) => [...v.values()]), lastModified()));
   await writeFile(join(out, 'style.css'), await concat(join(ROOT, 'src/css'), CSS_FILES, 'css'));
