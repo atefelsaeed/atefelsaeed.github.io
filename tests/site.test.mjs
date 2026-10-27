@@ -10,6 +10,7 @@ import { join } from 'node:path';
 import { build, ROOT } from '../scripts/build.mjs';
 
 let out;
+let shared; // src/content/shared.json: the source of truth for how many projects and case studies exist
 let pages; // [{ code, key, kind, file, href, url, html }]
 const byFile = new Map();
 
@@ -21,6 +22,7 @@ const ofKind = (code, kind) => pages.filter((p) => p.code === code && p.kind ===
 const fileOf = (href) => (href.endsWith('/') ? `${href.slice(1)}index.html` : href.slice(1));
 
 before(async () => {
+  shared = JSON.parse(await readFile(join(ROOT, 'src/content/shared.json'), 'utf8'));
   out = await mkdtemp(join(tmpdir(), 'portfolio-'));
   const built = await build({ outDir: out });
   pages = [];
@@ -37,7 +39,7 @@ test('every language gets a home page, a projects page and one page per case stu
   for (const code of ['en', 'ar']) {
     assert.equal(ofKind(code, 'home').length, 1);
     assert.equal(ofKind(code, 'projects').length, 1);
-    assert.equal(ofKind(code, 'project').length, 4);
+    assert.equal(ofKind(code, 'project').length, shared.cases.length);
   }
   assert.deepEqual(
     pages.filter((p) => p.code === 'en').map((p) => p.key),
@@ -47,6 +49,13 @@ test('every language gets a home page, a projects page and one page per case stu
   for (const f of ['style.css', 'app.js', '404.html', 'robots.txt', 'sitemap.xml', 'favicon.svg', 'Atef_Elsaeed_CV.pdf']) {
     assert.ok(await exists(join(out, f)), `${f} is missing from the build`);
   }
+});
+
+test('shared.json is consistent: featured and case-study ids are real projects', () => {
+  const ids = new Set(shared.projects.map((p) => p.id));
+  for (const id of shared.home.featured) assert.ok(ids.has(id), `featured "${id}" is not in projects`);
+  for (const c of shared.cases) assert.ok(ids.has(c.id), `case study "${c.id}" has no project card`);
+  assert.equal(ids.size, shared.projects.length, 'duplicate project ids');
 });
 
 test('page titles and descriptions are unique across the site', () => {
@@ -135,14 +144,30 @@ test('images have alt text, external links open safely', () => {
   }
 });
 
+test('basics that keep pages stable and accessible: image sizes, heading order, theme colour', () => {
+  for (const p of pages) {
+    for (const img of p.html.match(/<img\b[^>]*>/g) ?? []) {
+      assert.match(img, /\swidth="\d+"/, `${p.file}: image without width (layout shift): ${img.slice(0, 70)}`);
+      assert.match(img, /\sheight="\d+"/, `${p.file}: image without height (layout shift): ${img.slice(0, 70)}`);
+    }
+    const levels = [...p.html.matchAll(/<h([1-6])\b/g)].map((m) => Number(m[1]));
+    levels.forEach((level, i) => {
+      if (i > 0) assert.ok(level - levels[i - 1] <= 1, `${p.file}: heading jumps from h${levels[i - 1]} to h${level}`);
+    });
+    assert.match(p.html, /<meta name="theme-color"/, `${p.file}: theme-color`);
+  }
+});
+
 test('home: four featured projects, each with its links, and a way to the full list', () => {
   for (const code of ['en', 'ar']) {
     const [home] = ofKind(code, 'home');
-    assert.equal((home.html.match(/<article class="feature/g) || []).length, 4);
+    const featured = shared.home.featured.map((id) => shared.projects.find((p) => p.id === id));
+    assert.equal((home.html.match(/<article class="feature/g) || []).length, featured.length);
     assert.ok(home.html.includes(`href="${ofKind(code, 'projects')[0].href}"`), `${code}: link to all projects`);
     assert.ok(!home.html.includes('id="projects"'), 'the full grid lives on the projects page');
-    assert.equal((home.html.match(/class="card-link"/g) || []).length, 3, `${code}: featured projects with a case study are clickable`);
-    assert.equal((home.html.match(/class="thumb"/g) || []).length, 3, `${code}: thumbnails for projects with screenshots`);
+    const withStudy = featured.filter((p) => shared.cases.some((c) => c.id === p.id)).length;
+    assert.equal((home.html.match(/class="card-link"/g) || []).length, withStudy, `${code}: featured projects with a case study are clickable`);
+    assert.equal((home.html.match(/class="thumb"/g) || []).length, featured.filter((p) => p.thumb).length, `${code}: thumbnails for projects with screenshots`);
   }
 });
 
@@ -150,12 +175,13 @@ test('projects page: every project is a pre-rendered card, and case studies are 
   for (const code of ['en', 'ar']) {
     const [list] = ofKind(code, 'projects');
     const cards = list.html.match(/<div class="card"/g) || [];
-    assert.equal(cards.length, 18, `${code}: all projects are in the HTML, not built by script`);
+    const total = shared.projects.length;
+    assert.equal(cards.length, total, `${code}: all projects are in the HTML, not built by script`);
     const filterCounts = [...list.html.matchAll(/class="n">(\d+)</g)].map((m) => Number(m[1]));
-    assert.equal(filterCounts[0], 18);
-    assert.equal(filterCounts.slice(1).reduce((a, b) => a + b, 0), 18, 'category counts add up');
+    assert.equal(filterCounts[0], total);
+    assert.equal(filterCounts.slice(1).reduce((a, b) => a + b, 0), total, 'category counts add up');
     for (const study of ofKind(code, 'project')) assert.ok(list.html.includes(`class="card-link" href="${study.href}"`), `${code}: ${study.href} is linked from its card title`);
-    assert.equal((list.html.match(/class="card-link"/g) || []).length, 4);
+    assert.equal((list.html.match(/class="card-link"/g) || []).length, shared.cases.length);
   }
 });
 
@@ -175,7 +201,7 @@ test('client data (window.SITE) carries what the scripts need', () => {
     assert.ok(data.all && data.words.length > 1 && data.strings.needName && data.strings.caseStudy, p.file);
     assert.ok(data.contact.wa && data.contact.email, p.file);
     for (const href of Object.values(data.cases)) assert.ok(byFile.has(fileOf(href)), `${p.file}: case link ${href}`);
-    assert.equal(Object.keys(data.cases).length, 4);
+    assert.equal(Object.keys(data.cases).length, shared.cases.length);
   }
 });
 

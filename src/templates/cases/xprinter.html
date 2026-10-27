@@ -1,0 +1,11 @@
+    <article class="case" id="{{id}}">
+      {{> partials/case-body}}
+      <aside class="panel" aria-label="{{asideLabel}}">
+        <span class="label">{{pipelineLabel}}</span>
+        <div class="modules">{{#each pipeline}}
+          <div class="module">{{t}}<small>{{d}}</small></div>{{/each}}
+        </div>
+        <p class="note"{{#if @root.rtl}} dir="ltr"{{/if}}>{{stack}}</p>
+        <p class="note">{{note}}</p>
+      </aside>
+    </article>

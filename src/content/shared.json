@@ -17,7 +17,7 @@
     "sameAs": ["https://www.linkedin.com/in/atefelsaeed/", "https://github.com/atefelsaeed", "https://medium.com/@atefelsaid3"]
   },
   "home": {
-    "featured": ["dikirnis", "sulfah", "miqat", "reposphere"]
+    "featured": ["dikirnis", "sulfah", "belmally", "reposphere"]
   },
   "files": {
     "cv": "Atef_Elsaeed_CV.pdf",
@@ -74,11 +74,11 @@
         { "label": "App Store", "url": "https://apps.apple.com/us/app/id6773242084" },
         { "url": "https://play.google.com/store/apps/details?id=com.dkonline.vendor" }
       ],
-      "shots": [{ "src": "assets/shots/dikirnis-home.jpg" }, { "src": "assets/shots/dikirnis-listing.jpg" }],
+      "shots": [{ "src": "assets/shots/dikirnis-home.jpg", "w": 540, "h": 1082 }, { "src": "assets/shots/dikirnis-listing.jpg", "w": 540, "h": 1082 }],
       "proShots": [
-        { "src": "assets/shots/dikirnis-pro-home.jpg" },
-        { "src": "assets/shots/dikirnis-pro-products.jpg" },
-        { "src": "assets/shots/dikirnis-pro-analytics.jpg" }
+        { "src": "assets/shots/dikirnis-pro-home.jpg", "w": 540, "h": 1097 },
+        { "src": "assets/shots/dikirnis-pro-products.jpg", "w": 540, "h": 1097 },
+        { "src": "assets/shots/dikirnis-pro-analytics.jpg", "w": 540, "h": 1097 }
       ]
     },
     {
@@ -97,14 +97,26 @@
         { "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=com.miqat.islamic" },
         { "label": "App Store", "url": "https://apps.apple.com/us/app/id6782164550" }
       ],
-      "shots": [{ "src": "assets/shots/miqat-home.jpg" }, { "src": "assets/shots/miqat-quran.jpg" }, { "src": "assets/shots/miqat-mushaf.jpg" }]
+      "shots": [{ "src": "assets/shots/miqat-home.jpg", "w": 540, "h": 1097 }, { "src": "assets/shots/miqat-quran.jpg", "w": 540, "h": 1097 }, { "src": "assets/shots/miqat-mushaf.jpg", "w": 540, "h": 1097 }]
     },
     {
       "id": "reposphere",
       "pkg": "github.com/atefelsaeed/RepoSphere",
       "links": [{ "url": "https://atefelsaeed.github.io/RepoSphere/" }, { "url": "https://github.com/atefelsaeed/RepoSphere" }],
-      "shots": [{ "src": "assets/shots/reposphere-inbox.jpg" }, { "src": "assets/shots/reposphere-detail.jpg" }],
+      "shots": [{ "src": "assets/shots/reposphere-inbox.jpg", "w": 540, "h": 1173 }, { "src": "assets/shots/reposphere-detail.jpg", "w": 540, "h": 1173 }],
       "stack": "Flutter · Riverpod · GoRouter · Supabase · Sentry · GitHub Actions"
+    },
+    {
+      "id": "belmally",
+      "pkg": "NestJS · React · Flutter",
+      "links": [],
+      "stack": "NestJS · TypeORM · PostgreSQL · React · Ant Design · Flutter · Docker · GitHub Actions"
+    },
+    {
+      "id": "xprinter",
+      "pkg": "Flutter · Android · Bluetooth",
+      "links": [],
+      "stack": "Flutter · Riverpod · GoRouter · Dio · ESC/POS · Kotlin (Bluetooth SPP)"
     }
   ],
   "skills": {
@@ -130,6 +142,7 @@
   },
   "projects": [
     { "id": "reposphere", "thumb": "assets/shots/reposphere-inbox.jpg", "links": [{ "url": "https://atefelsaeed.github.io/RepoSphere/" }, { "label": "GitHub", "url": "https://github.com/atefelsaeed/RepoSphere" }] },
+    { "id": "belmally" },
     { "id": "qsalary", "links": [{ "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=app.qsalary.com" }, { "label": "App Store", "url": "https://apps.apple.com/jp/app/qsalary/id1580559019" }] },
     { "id": "sulfah", "links": [{ "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=com.sulfah" }, { "label": "App Store", "url": "https://apps.apple.com/sa/app/id1523225841" }] },
     { "id": "dikirnis", "thumb": "assets/shots/dikirnis-home.jpg", "links": [{ "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=com.dkonline.app" }, { "label": "App Store", "url": "https://apps.apple.com/us/app/id6773242084" }] },
@@ -143,6 +156,7 @@
     { "id": "performs" },
     { "id": "fmac" },
     { "id": "delta-oil", "links": [{ "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=delta.oil.app" }, { "label": "App Store", "url": "https://apps.apple.com/us/app/delta-oil/id6745424979" }] },
+    { "id": "xprinter" },
     { "id": "tikitaka" },
     { "id": "future-shops" },
     { "id": "xo-egypt" },

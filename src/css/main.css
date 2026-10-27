@@ -50,12 +50,6 @@
 .dots button { width: 8px; height: 8px; border-radius: 4px; border: 0; padding: 0; background: var(--line); transition: width .3s, background .3s; }
 .dots button.on { width: 22px; background: var(--accent); }
 
-/* Marquee */
-.marquee { border-block: 1px solid var(--line); margin-inline: -20px; overflow: hidden; padding-block: 14px; mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
-.track { display: flex; gap: 40px; width: max-content; animation: scroll 40s linear infinite; font-family: var(--mono); font-size: 0.85rem; color: var(--muted); }
-.track span::before { content: "◆"; color: var(--accent); margin-right: 12px; font-size: 0.6rem; vertical-align: 2px; }
-@keyframes scroll { to { transform: translateX(-50%); } }
-
 /* Sections */
 section { padding-block: 72px; }
 section + section { border-top: 1px solid var(--line); }
@@ -173,7 +167,7 @@ section + section { border-top: 1px solid var(--line); }
 .card.fade { animation: cardIn .4s ease both; }
 @keyframes cardIn { from { opacity: 0; transform: translateY(10px) scale(.98); } }
 .card-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.card h4 { font-family: var(--display); font-size: 1rem; font-weight: 700; margin: 0; }
+.card h2 { font-family: var(--display); font-size: 1rem; font-weight: 700; margin: 0; }
 .card p { color: var(--muted); font-size: 0.9rem; }
 .platforms { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); }
 .metric { font-family: var(--mono); font-size: 0.78rem; color: var(--ok); }
@@ -242,7 +236,7 @@ footer { padding-block: 32px 48px; color: var(--muted); font-size: 0.85rem; bord
 }
 @media (max-width: 600px) {
   body { padding-inline: 16px; }
-  nav, .marquee { margin-inline: -16px; }
+  nav { margin-inline: -16px; }
   nav { padding-inline: 16px; }
   .hero { padding-block: 40px; }
   .stats { grid-template-columns: repeat(2, 1fr); }

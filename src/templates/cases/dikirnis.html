@@ -1,9 +1,9 @@
     <article class="case" id="{{id}}">
       {{> partials/case-body}}
       <aside class="panel" aria-label="{{asideLabel}}">
-        <div class="shots">{{#each shots}}<img src="/{{src}}" alt="{{alt}}" width="540" loading="lazy">{{/each}}</div>
+        <div class="shots">{{#each shots}}<img src="/{{src}}" alt="{{alt}}" width="{{w}}" height="{{h}}" loading="lazy">{{/each}}</div>
         <span class="label">{{proLabel}}</span>
-        <div class="shots">{{#each proShots}}<img src="/{{src}}" alt="{{alt}}" width="540" loading="lazy">{{/each}}</div>
+        <div class="shots">{{#each proShots}}<img src="/{{src}}" alt="{{alt}}" width="{{w}}" height="{{h}}" loading="lazy">{{/each}}</div>
         <span class="label">{{treeLabel}}</span>
         {{#with tree}}{{> partials/tree}}{{/with}}
         <p class="note">{{note}}</p>

@@ -1,0 +1,15 @@
+    <article class="case" id="{{id}}">
+      {{> partials/case-body}}
+      <aside class="panel" aria-label="{{asideLabel}}">
+        <span class="label">{{appsLabel}}</span>
+        <div class="modules">{{#each apps}}
+          <div class="module">{{t}}<small>{{d}}</small></div>{{/each}}
+        </div>
+        <span class="label">{{tiersLabel}}</span>
+        <div class="modules">{{#each tiers}}
+          <div class="module">{{t}}<small>{{d}}</small></div>{{/each}}
+        </div>
+        <p class="note"{{#if @root.rtl}} dir="ltr"{{/if}}>{{stack}}</p>
+        <p class="note">{{note}}</p>
+      </aside>
+    </article>

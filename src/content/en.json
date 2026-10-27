@@ -126,6 +126,11 @@
         "chips": ["Travel", "AI chat"]
       },
       {
+        "current": true, "when": "May 2026 – now", "role": "Founder & Sole Developer", "org": "Belmally ERP", "kind": "Venture", "venture": true,
+        "bullets": ["Multi-tenant ERP: a NestJS API, a React dashboard, a Flutter desktop POS and a Flutter field-sales app", "Double-entry accounting that posts itself from sales, purchases, expenses and returns", "About 520 automated tests, shared API contract tests and CI/CD with GitHub Actions"],
+        "chips": ["NestJS", "React", "Flutter"]
+      },
+      {
         "current": true, "when": "Apr 2026 – now", "role": "Co-Founder & Sole Mobile Developer", "org": "Dikirnis On", "kind": "Venture", "venture": true,
         "bullets": ["Local super-app with 10+ sectors and a separate merchant app", "2,500+ users and 500+ businesses within 5 months of launch", "Data-driven nested categories that go live from the dashboard with no app update"],
         "chips": ["Bloc", "go_router", ".NET API"]
@@ -160,7 +165,7 @@
   "work": {
     "label": "Projects",
     "title": "Selected work",
-    "intro": "Four apps that show how I work, from a fintech app with 500K+ downloads to an open-source tool you can read line by line.",
+    "intro": "Four projects that show how I work: a local super-app I launched, a fintech app with 500K+ downloads, an ERP platform I am building alone, and an open-source tool you can read line by line.",
     "allLink": "See all projects"
   },
   "projectsPage": {
@@ -282,6 +287,62 @@
         { "t": "PRs & issues", "d": "comment threads" },
         { "t": "Notifications", "d": "unread count, mark read" }
       ]
+    },
+    {
+      "id": "belmally",
+      "seo": { "title": "Belmally ERP case study: four apps on one API | Atef Elsaeed", "description": "Belmally is a multi-tenant ERP I am building alone: a NestJS API, a React dashboard, a Flutter desktop POS and a Flutter field-sales app, with double-entry accounting and per-customer modules." },
+      "tag": "Founder · sole developer",
+      "title": "Belmally ERP",
+      "summary": [
+        { "dt": "Context", "dd": "A multi-tenant ERP for distribution, retail and light manufacturing businesses. One core (inventory, sales, double-entry accounting, purchasing, expenses, reports) with industry modules that are switched on per customer: manufacturing, device and warranty tracking, installments, maintenance, approvals, CRM and multi-branch." },
+        { "dt": "Status", "dd": "In development, with no customers yet. Built alone since May 2026: 45 API controllers, 82 database entities and four apps that share one API." }
+      ],
+      "more": [
+        { "dt": "My role", "dd": "Founder and the only developer: product scope, database and API design, the accounting engine, all four apps, the Docker setup and the CI/CD pipeline." },
+        { "dt": "Key decisions", "dd": "Every financial action posts its own double-entry journal lines, so the books can't drift away from sales, purchases, expenses and returns. Stock is an append-only ledger. Every table carries a tenant id taken from the login token. Document numbers are issued under a database lock, so two cashiers never get the same invoice number. Modules are feature flags per customer, so one code base can serve a supermarket and a repair shop. Arabic is the default language, with English and right-to-left layouts on all four apps." },
+        { "dt": "Quality", "dd": "One shared API contract file is checked by the backend, the web app, the desktop app and the mobile app, so the API and its clients can't drift apart. About 520 automated tests across the four apps, end-to-end scripts that run against a real server and database, and a CI pipeline that also checks that the migrations build the same schema as the entities." },
+        { "dt": "Next", "dd": "Still open: Egyptian e-invoicing (ETA), which waits for a real customer; push-notification setup; and testing receipt printing and camera barcode scanning on real devices." }
+      ],
+      "asideLabel": "How Belmally is put together",
+      "appsLabel": "Four apps, one API",
+      "apps": [
+        { "t": "API", "d": "NestJS · TypeORM · PostgreSQL" },
+        { "t": "Web dashboard", "d": "React · Ant Design · TanStack Query" },
+        { "t": "Desktop POS", "d": "Flutter · offline · Windows and macOS" },
+        { "t": "Field sales app", "d": "Flutter · offline · push · Android and iOS" }
+      ],
+      "tiersLabel": "Modules switched on per customer",
+      "tiers": [
+        { "t": "Core", "d": "inventory, sales and POS, accounting, purchasing, expenses, reports" },
+        { "t": "Professional", "d": "returns, price lists, distribution trips, advanced reports" },
+        { "t": "Industry", "d": "manufacturing, batch and expiry, devices and warranty, installments, maintenance" },
+        { "t": "Enterprise", "d": "approvals, CRM, multi-branch, an AI assistant" }
+      ],
+      "note": "The code is private, so this page shows the design rather than linking to a repository."
+    },
+    {
+      "id": "xprinter",
+      "seo": { "title": "XPrinter App case study: PDFs on Bluetooth thermal printers | Atef Elsaeed", "description": "An Android app that prints PDF files on 80 mm Bluetooth thermal printers: each page is rendered to an image at the printer's resolution and sent as ESC/POS commands over a native Bluetooth socket." },
+      "tag": "Client app · solo",
+      "title": "XPrinter App",
+      "summary": [
+        { "dt": "Context", "dd": "An Android app that prints PDF files on 80 mm Bluetooth thermal printers. The user picks a paired printer, chooses a PDF on the device or opens one from another app (Open with, or Share), and prints." },
+        { "dt": "Status", "dd": "In use by a client." }
+      ],
+      "more": [
+        { "dt": "My role", "dd": "Built on my own, from the Flutter app to the native Android Bluetooth code." },
+        { "dt": "Key decision", "dd": "Thermal printers don't understand PDFs. The app renders each page to an image at the printer's resolution (203 DPI, 576 dots across for 80 mm), turns it grayscale and sends it as ESC/POS image commands, so any PDF prints the way it looks on screen, with no fonts or code pages to handle per printer. The Bluetooth plugin only lists paired devices, so a small Kotlin channel opens the Bluetooth SPP socket and sends the bytes." },
+        { "dt": "Structure", "dd": "Feature-first Clean Architecture with Riverpod and go_router." }
+      ],
+      "asideLabel": "How a PDF becomes a receipt",
+      "pipelineLabel": "From PDF to paper",
+      "pipeline": [
+        { "t": "Render", "d": "each page at 203 DPI" },
+        { "t": "Fit", "d": "576 dots across (80 mm), grayscale" },
+        { "t": "Encode", "d": "ESC/POS image plus paper feed" },
+        { "t": "Send", "d": "Bluetooth SPP socket from Kotlin" }
+      ],
+      "note": "The code is private, so this page shows the design rather than linking to a repository."
     }
   ],
   "skills": {
@@ -351,6 +412,7 @@
   },
   "projects": [
     { "id": "reposphere", "n": "RepoSphere", "c": "Open source", "d": "One dashboard for GitHub, GitLab, Azure DevOps and Gitea repos, PRs, issues and notifications. Flutter web-first, Clean Architecture, Riverpod, CI.", "m": "In active development", "links": [{ "label": "Live demo" }, null] },
+    { "id": "belmally", "n": "Belmally ERP", "c": "Enterprise", "d": "Multi-tenant ERP for distribution, retail and light manufacturing: a NestJS API, a React dashboard, a Flutter desktop POS and a field-sales app. Built solo.", "m": "In development" },
     { "id": "qsalary", "n": "QSalary", "c": "Fintech", "d": "Earned wage access app. Led development of financial flows, authentication and deep linking.", "m": "40K+ downloads · no longer on the stores" },
     { "id": "sulfah", "n": "Sulfah", "c": "Fintech", "d": "Lending app. Built iOS Live Activities, deep linking, secure auth and improved onboarding.", "m": "500K+ downloads" },
     { "id": "dikirnis", "n": "Dikirnis On", "c": "Super-app", "d": "Local super-app with 10+ sectors, bookings, jobs and a market. Co-founder and sole mobile developer.", "m": "2,500+ users" },
@@ -364,6 +426,7 @@
     { "id": "performs", "n": "Performs", "c": "Fitness", "d": "Fitness tracking app for athletes with workout plans, progress analytics and social features." },
     { "id": "fmac", "n": "FMAC", "c": "Enterprise", "d": "Facility management app for maintenance scheduling, asset tracking and reports." },
     { "id": "delta-oil", "n": "Delta Oil", "c": "Enterprise", "d": "Field operations and inventory app. Improved stability as downloads grew from 1K to 5K+.", "m": "5K+ downloads" },
+    { "id": "xprinter", "n": "XPrinter App", "c": "Tools", "d": "Android app that prints PDFs on 80 mm Bluetooth thermal printers by rendering each page to an image and sending ESC/POS commands.", "m": "Used by a client" },
     { "id": "tikitaka", "n": "TikiTaka", "c": "Sports", "d": "Football community app for organizing matches, managing teams and player stats." },
     { "id": "future-shops", "n": "Future Shops", "c": "E-commerce", "d": "Shopping app with secure checkout and live inventory." },
     { "id": "xo-egypt", "n": "XO Egypt", "c": "E-commerce", "d": "Food delivery app with live order tracking on Google Maps, payments and push notifications." },
