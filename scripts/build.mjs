@@ -4,13 +4,15 @@
 //
 //   node scripts/build.mjs [--out dist]
 //
-// Pages per language: home, /projects/ and one /projects/<id>/ page for every entry in "cases".
+// Pages per language: home, /projects/ with one /projects/<id>/ page per entry in "cases", experience, /blog/ with one
+// /blog/<id>/ page per entry in "articles" (text in src/articles/<id>/<code>.md), and a feed.xml of the articles.
 
 import { execFileSync } from 'node:child_process';
 import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createEngine, merge } from './lib/template.mjs';
+import { parseFrontMatter, renderMarkdown } from './lib/markdown.mjs';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -18,7 +20,7 @@ export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const LANGUAGES = ['en', 'ar'];
 // Stylesheets and scripts are concatenated in this order (later rules override earlier ones).
 const CSS_FILES = ['tokens', 'base', 'main'];
-const JS_FILES = ['projects', 'theme', 'main', 'contact'];
+const JS_FILES = ['projects', 'blog', 'theme', 'main', 'contact'];
 
 const readJson = async (path) => JSON.parse(await readFile(path, 'utf8'));
 
@@ -47,6 +49,20 @@ async function loadTemplates() {
   return { layout, partials, icons };
 }
 
+// The articles of one language: shared.json gives id, date and category, src/articles/<id>/<code>.md the text.
+async function loadArticles(shared, code) {
+  const out = [];
+  for (const meta of shared.articles) {
+    const where = `src/articles/${meta.id}/${code}.md`;
+    const { meta: front, body } = parseFrontMatter(await readFile(join(ROOT, where), 'utf8'), where);
+    for (const key of ['title', 'description', 'tag']) if (!front[key]) throw new Error(`${where}: front matter needs "${key}"`);
+    if (!shared.blog.categories.includes(meta.category)) throw new Error(`Article "${meta.id}" has the unknown category "${meta.category}"`);
+    const { html, toc, words } = renderMarkdown(body);
+    out.push({ ...meta, ...front, html, toc, readMin: String(Math.max(1, Math.ceil(words / 200))) });
+  }
+  return out.sort((a, b) => b.date.localeCompare(a.date));
+}
+
 const encodeQuery = (s) => encodeURIComponent(s).replace(/[!'()*]/g, (c) => '%' + c.charCodeAt(0).toString(16).toUpperCase());
 const hrefOf = (file) => '/' + file.replace(/index\.html$/, '');
 
@@ -59,12 +75,13 @@ function describePages(data, origin) {
     { key: 'experience', kind: 'experience', file: `${base}experience/index.html` },
     { key: 'blog', kind: 'blog', file: `${base}blog/index.html` },
     ...data.cases.map((c) => ({ key: `project:${c.id}`, kind: 'project', slug: c.id, file: `${base}projects/${c.id}/index.html` })),
+    ...data.articles.map((a) => ({ key: `article:${a.id}`, kind: 'article', slug: a.id, file: `${base}blog/${a.id}/index.html` })),
   ];
   return pages.map((p) => ({ ...p, code: data.page.code, href: hrefOf(p.file), url: origin + hrefOf(p.file) }));
 }
 
 // Language-level data: shared + language file, with the lists the templates need already resolved.
-function languageData(shared, langs, code) {
+function languageData(shared, langs, code, articles) {
   const data = merge(shared, langs[code]);
   data.contact.waUrl = `https://wa.me/${data.contact.wa}?text=${encodeQuery(data.contact.waText)}`;
 
@@ -86,7 +103,25 @@ function languageData(shared, langs, code) {
 
   const counts = new Map();
   for (const p of data.projects) counts.set(p.c, (counts.get(p.c) ?? 0) + 1);
-  data.homePosts = data.blog.posts.slice(0, 3); // the home page shows the first three; /blog/ lists all
+  // One list for the blog: the articles on this site (newest first), then the ones that live on Medium.
+  const locale = code === 'ar' ? 'ar-EG-u-nu-latn' : 'en-US';
+  const names = data.blog.categoryNames;
+  data.articles = articles.map((a) => ({
+    ...a,
+    href: `/${data.page.base}blog/${a.id}/`,
+    dateText: new Date(`${a.date}T00:00:00Z`).toLocaleDateString(locale, { month: 'short', year: 'numeric', timeZone: 'UTC' }),
+    categoryName: names[a.category],
+  }));
+  data.posts = [
+    ...data.articles.map((a) => ({ native: true, href: a.href, title: a.title, desc: a.description, tag: a.tag, date: a.dateText, category: a.category, categoryName: a.categoryName, readMin: a.readMin })),
+    ...data.blog.posts.map((p) => ({ ...p, native: false, categoryName: names[p.category] })),
+  ];
+  data.homePosts = data.posts.slice(0, 3); // the home page shows the first three; /blog/ lists all
+  const perCategory = data.blog.categories.map((id) => ({ id, name: names[id], count: data.posts.filter((p) => p.category === id).length }));
+  data.blogCategories = [
+    { id: 'all', name: data.blog.all, count: data.posts.length, active: true },
+    ...perCategory.filter((c) => c.count > 0).map((c) => ({ ...c, active: false })),
+  ];
   data.categories = [
     { name: data.app.all, count: data.projects.length, active: true },
     ...[...counts].map(([name, count]) => ({ name, count, active: false })),
@@ -102,7 +137,7 @@ function languageData(shared, langs, code) {
 }
 
 // The nav item (by its "page") that a page belongs to; case studies belong to Projects.
-const NAV_PAGE = { projects: 'projects', project: 'projects', experience: 'experience', blog: 'blog' };
+const NAV_PAGE = { projects: 'projects', project: 'projects', experience: 'experience', blog: 'blog', article: 'blog' };
 
 function navLinks(data, page) {
   return data.nav.links.map((l) => {
@@ -119,7 +154,7 @@ function pageContext(data, langs, byKey, page) {
   const ctx = { ...data };
   const alternates = LANGUAGES.map((code) => byKey.get(page.key).get(code));
   const other = alternates.find((a) => a.code !== page.code);
-  ctx.page = { ...data.page, kind: page.kind, url: page.url, href: page.href, indexable: true, projectsHref: `/${data.page.base}projects/`, experienceHref: `/${data.page.base}experience/`, blogHref: `/${data.page.base}blog/`, skip: page.kind === 'home' ? 'about' : 'top' };
+  ctx.page = { ...data.page, kind: page.kind, url: page.url, href: page.href, indexable: true, projectsHref: `/${data.page.base}projects/`, experienceHref: `/${data.page.base}experience/`, blogHref: `/${data.page.base}blog/`, feedHref: `/${data.page.base}feed.xml`, skip: page.kind === 'home' ? 'about' : 'top' };
   ctx.alternates = alternates.map(({ code, url }) => ({ code, url }));
   ctx.defaultUrl = alternates[0].url;
   ctx.otherLang = other ? { code: other.code, name: langs[other.code].page.name, href: other.href } : null;
@@ -132,6 +167,26 @@ function pageContext(data, langs, byKey, page) {
   } else if (page.kind === 'projects' || page.kind === 'experience' || page.kind === 'blog') {
     const p = data[`${page.kind}Page`];
     ctx.seo = { title: p.seoTitle, description: p.seoDescription, ogTitle: p.seoTitle, ogDescription: p.seoDescription, image: defaultImage };
+  } else if (page.kind === 'article') {
+    const a = data.articles.find((x) => x.id === page.slug);
+    ctx.article = {
+      ...a,
+      hasToc: a.toc.length >= 3,
+      related: data.articles.filter((x) => x.id !== a.id && x.category === a.category).slice(0, 2),
+    };
+    ctx.seo = { title: `${a.title} | ${data.blog.title}`, description: a.description, ogTitle: a.title, ogDescription: a.description, image: defaultImage, type: 'article' };
+    ctx.articleLd = {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: a.title,
+      description: a.description,
+      datePublished: a.date,
+      dateModified: a.date,
+      inLanguage: data.page.code,
+      image: defaultImage,
+      mainEntityOfPage: page.url,
+      author: { '@type': 'Person', name: data.person.name, url: data.site.origin },
+    };
   } else {
     const c = data.cases.find((x) => x.id === page.slug);
     ctx.case = { ...c, template: `cases/${c.id}` };
@@ -141,11 +196,12 @@ function pageContext(data, langs, byKey, page) {
     ctx.prevCase = link(data.cases[(at - 1 + data.cases.length) % data.cases.length]);
     ctx.nextCase = link(data.cases[(at + 1) % data.cases.length]);
   }
+  ctx.seo.type ??= 'website';
   ctx.breadcrumbs = breadcrumbs(ctx, page, data.site.origin);
   return ctx;
 }
 
-// BreadcrumbList for search results: Home > Projects > (case study).
+// BreadcrumbList for search results: Home > Projects > (case study), Home > Blog > (article).
 function breadcrumbs(data, page, origin) {
   if (page.kind === 'home') return null;
   const section = data.nav.links.find((l) => l.page === NAV_PAGE[page.kind]);
@@ -154,6 +210,7 @@ function breadcrumbs(data, page, origin) {
     [section.t, origin + `/${data.page.base}${section.page}/`],
   ];
   if (page.kind === 'project') crumbs.push([data.cases.find((c) => c.id === page.slug).title, page.url]);
+  if (page.kind === 'article') crumbs.push([data.articles.find((a) => a.id === page.slug).title, page.url]);
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -175,6 +232,35 @@ function sitemapXml(groups, lastmod) {
   }
   lines.push('</urlset>', '');
   return lines.join('\n');
+}
+
+// RSS 2.0 feed of the articles written on this site, one per language.
+function feedXml(data, origin) {
+  const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const items = data.articles.map((a) => [
+    '    <item>',
+    `      <title>${esc(a.title)}</title>`,
+    `      <link>${origin}${a.href}</link>`,
+    `      <guid isPermaLink="true">${origin}${a.href}</guid>`,
+    `      <pubDate>${new Date(`${a.date}T00:00:00Z`).toUTCString()}</pubDate>`,
+    `      <category>${esc(a.categoryName)}</category>`,
+    `      <description>${esc(a.description)}</description>`,
+    '    </item>',
+  ].join('\n'));
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
+    '  <channel>',
+    `    <title>${esc(`${data.blog.title} | ${data.person.name}`)}</title>`,
+    `    <link>${origin}/${data.page.base}blog/</link>`,
+    `    <description>${esc(data.blog.intro)}</description>`,
+    `    <language>${data.page.code}</language>`,
+    `    <atom:link href="${origin}/${data.page.base}feed.xml" rel="self" type="application/rss+xml"/>`,
+    ...items,
+    '  </channel>',
+    '</rss>',
+    '',
+  ].join('\n');
 }
 
 function lastModified() {
@@ -202,7 +288,8 @@ export async function build({ outDir = join(ROOT, 'dist') } = {}) {
   const { layout, partials, icons } = await loadTemplates();
   const engine = createEngine({ partials, icons });
 
-  const perLang = Object.fromEntries(LANGUAGES.map((code) => [code, languageData(shared, langs, code)]));
+  const perLang = {};
+  for (const code of LANGUAGES) perLang[code] = languageData(shared, langs, code, await loadArticles(shared, code));
   const described = Object.fromEntries(LANGUAGES.map((code) => [code, describePages(perLang[code], shared.site.origin)]));
   const byKey = new Map();
   for (const code of LANGUAGES) {
@@ -239,7 +326,7 @@ export async function build({ outDir = join(ROOT, 'dist') } = {}) {
   // 404.html: GitHub Pages serves it for every unknown URL, so it is not tied to one language.
   const home = perLang[LANGUAGES[0]];
   const nf = { ...home };
-  nf.page = { ...home.page, kind: 'notfound', url: `${shared.site.origin}/404.html`, href: '/404.html', projectsHref: '/projects/', experienceHref: '/experience/', blogHref: '/blog/', skip: 'top' };
+  nf.page = { ...home.page, kind: 'notfound', url: `${shared.site.origin}/404.html`, href: '/404.html', projectsHref: '/projects/', experienceHref: '/experience/', blogHref: '/blog/', feedHref: '/feed.xml', skip: 'top' };
   nf.alternates = [];
   const otherCode = LANGUAGES.find((c) => c !== LANGUAGES[0]);
   nf.otherLang = otherCode ? { code: otherCode, name: langs[otherCode].page.name, href: described[otherCode][0].href } : null;
@@ -247,10 +334,12 @@ export async function build({ outDir = join(ROOT, 'dist') } = {}) {
   nf.nav = { ...home.nav, links: nfLinks, brandHref: nfLinks[0].href, hireHref: `${home.page.home}#contact` };
   nf.seo = { title: shared.notFound.seoTitle, description: shared.notFound.seoDescription, ogTitle: shared.notFound.seoTitle, ogDescription: shared.notFound.seoDescription, image: `${shared.site.origin}/${shared.files.ogImage}` };
   nf.breadcrumbs = null;
+  nf.seo.type = 'website';
   nf.body = engine.renderString(partials['pages/notfound'], nf, 'pages/notfound');
   await writeFile(join(out, '404.html'), engine.renderString(layout, nf, 'layout').replace(/\n[ \t]*(?=\n)/g, ''));
 
   await writeFile(join(out, 'sitemap.xml'), sitemapXml([...byKey.values()].map((v) => [...v.values()]), lastModified()));
+  for (const code of LANGUAGES) await writeFile(join(out, perLang[code].page.base, 'feed.xml'), feedXml(perLang[code], shared.site.origin));
   await writeFile(join(out, 'style.css'), await concat(join(ROOT, 'src/css'), CSS_FILES, 'css'));
   await writeFile(join(out, 'app.js'), await concat(join(ROOT, 'src/js'), JS_FILES, 'js'));
 

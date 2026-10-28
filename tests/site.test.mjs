@@ -114,13 +114,13 @@ test('case studies get their own share image; every other page uses the default 
   for (const c of shared.cases) assert.ok(await exists(join(out, 'og', `${c.id}.png`)), `run: python3 scripts/make-og.py (no og/${c.id}.png)`);
 });
 
-test('BreadcrumbList structured data: Home > Projects > case study, never on the home page', () => {
+test('BreadcrumbList structured data: Home > Projects > case study (or Home > Blog > article), never on the home page', () => {
   for (const p of pages) {
     const blocks = [...p.html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]));
     const crumbs = blocks.find((b) => b['@type'] === 'BreadcrumbList');
     if (p.kind === 'home') { assert.equal(crumbs, undefined, `${p.file}: no breadcrumbs on the home page`); continue; }
     const items = crumbs.itemListElement;
-    assert.equal(items.length, p.kind === 'project' ? 3 : 2, p.file);
+    assert.equal(items.length, ['project', 'article'].includes(p.kind) ? 3 : 2, p.file);
     items.forEach((it, i) => assert.equal(it.position, i + 1));
     assert.equal(items.at(-1).item, p.url, `${p.file}: the last crumb is the page itself`);
     for (const it of items) assert.ok(byFile.has(fileOf(new URL(it.item).pathname)), `${p.file}: crumb ${it.item} is not a built page`);
@@ -255,7 +255,7 @@ test('blog: home shows three articles and links to /blog/, which lists every art
     const section = /<section id="blog">[\s\S]*?<\/section>/.exec(home.html)[0];
     assert.equal((section.match(/class="post reveal"/g) || []).length, 3, `${code}: three posts on the home page`);
     assert.ok(section.includes(`href="${page.href}"`), `${code}: home links to all articles`);
-    assert.equal((page.html.match(/class="post reveal"/g) || []).length, shared.blog.posts.length, `${code}: /blog/ lists every article`);
+    assert.equal((page.html.match(/class="post reveal"/g) || []).length, shared.blog.posts.length + shared.articles.length, `${code}: /blog/ lists every article`);
     for (const post of shared.blog.posts) assert.ok(page.html.includes(`href="${post.url}"`), `${code}: ${post.title}`);
   }
 });
@@ -318,6 +318,46 @@ test('robots.txt keeps the sitemap and the AI crawler rules, and llms.txt only l
     assert.ok(await exists(join(out, file)), `llms.txt links to ${url}, which is not built`);
   }
   for (const c of shared.cases) assert.ok(llms.includes(`/projects/${c.id}/`), `llms.txt misses the ${c.id} case study`);
+  for (const a of shared.articles) assert.ok(llms.includes(`/blog/${a.id}/`), `llms.txt misses the ${a.id} article`);
+});
+
+test('articles: a page per language with its metadata, structured data and a way back', () => {
+  for (const code of ['en', 'ar']) {
+    const found = ofKind(code, 'article');
+    assert.equal(found.length, shared.articles.length);
+    for (const p of found) {
+      assert.equal((p.html.match(/<h1[ >]/g) || []).length, 1, `${p.file}: exactly one h1`);
+      assert.match(p.html, /<meta property="og:type" content="article">/, p.file);
+      const ld = [...p.html.matchAll(/<script type="application\/ld\+json">([^<]+)<\/script>/g)].map((m) => JSON.parse(m[1]));
+      const article = ld.find((x) => x['@type'] === 'Article');
+      assert.ok(article?.headline && article.datePublished && article.inLanguage === code, `${p.file}: Article structured data`);
+      assert.ok(ld.some((x) => x['@type'] === 'BreadcrumbList'), `${p.file}: breadcrumbs`);
+      assert.ok(p.html.includes('class="prose"') && !p.html.includes('<script>alert'), `${p.file}: body is rendered`);
+      assert.match(p.html, new RegExp(`href="${ofKind(code, 'blog')[0].href}"`), `${p.file}: links back to the blog`);
+      assert.match(p.html, /<link rel="alternate" type="application\/rss\+xml"/, p.file);
+    }
+  }
+});
+
+test('the blog page lists articles and Medium posts under filters that match what is listed', () => {
+  for (const code of ['en', 'ar']) {
+    const { html } = ofKind(code, 'blog')[0];
+    const posts = [...html.matchAll(/<a class="post reveal" data-cat="(\w+)"/g)].map((m) => m[1]);
+    assert.equal(posts.length, shared.articles.length + shared.blog.posts.length);
+    const buttons = [...html.matchAll(/data-cat="(\w+)" aria-pressed="[a-z]+">[^<]*<span class="n">(\d+)/g)].map((m) => [m[1], Number(m[2])]);
+    assert.deepEqual(buttons[0], ['all', posts.length]);
+    for (const [id, n] of buttons.slice(1)) assert.equal(posts.filter((c) => c === id).length, n, `${code}: filter "${id}" count`);
+    assert.ok(buttons.length > 1, 'at least one category button');
+  }
+});
+
+test('feed.xml per language lists every article with absolute links', async () => {
+  for (const [code, file] of [['en', 'feed.xml'], ['ar', 'ar/feed.xml']]) {
+    const xml = await read(file);
+    assert.match(xml, new RegExp(`<language>${code}</language>`));
+    assert.equal((xml.match(/<item>/g) || []).length, shared.articles.length);
+    for (const p of ofKind(code, 'article')) assert.ok(xml.includes(`<link>${p.url}</link>`), `${file} misses ${p.url}`);
+  }
 });
 
 test('the build is deterministic', async () => {

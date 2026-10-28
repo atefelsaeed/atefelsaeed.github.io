@@ -19,6 +19,11 @@
 - [Belmally ERP](https://atefelsaeed.github.io/projects/belmally/): ERP with a web app, a desktop POS and a mobile sales app
 - [XPrinter](https://atefelsaeed.github.io/projects/xprinter/): Android app that prints PDFs on 80 mm Bluetooth thermal printers, used by a client
 
+## Articles
+
+- [How I built my bilingual portfolio without a framework](https://atefelsaeed.github.io/blog/portfolio-without-a-framework/): a static site in English and Arabic built by a Node script, and the tests that protect it
+- Six more Flutter and Dart articles are on [Medium](https://medium.com/@atefelsaid3)
+
 ## Contact
 
 - Email: atefelsaid3@gmail.com

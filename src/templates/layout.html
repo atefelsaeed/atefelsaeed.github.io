@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0A111E" media="(prefers-color-scheme: dark)">
 <title>{{seo.title}}</title>
 <meta name="description" content="{{seo.description}}">
-<meta property="og:type" content="website">
+<meta property="og:type" content="{{seo.type}}">
 <meta property="og:title" content="{{seo.ogTitle}}">
 <meta property="og:description" content="{{seo.ogDescription}}">
 <meta property="og:url" content="{{page.url}}">
@@ -18,10 +18,12 @@
 <meta name="twitter:card" content="summary_large_image">
 {{#if meta.ogLocale}}<meta property="og:locale" content="{{meta.ogLocale}}">{{/if}}
 <script type="application/ld+json">{{@json person}}</script>
-{{#if breadcrumbs}}<script type="application/ld+json">{{@json breadcrumbs}}</script>
+{{#if articleLd}}<script type="application/ld+json">{{@json articleLd}}</script>
+{{/if}}{{#if breadcrumbs}}<script type="application/ld+json">{{@json breadcrumbs}}</script>
 {{/if}}{{#if page.indexable}}<link rel="canonical" href="{{page.url}}">{{#each alternates}}
 <link rel="alternate" hreflang="{{code}}" href="{{url}}">{{/each}}
 <link rel="alternate" hreflang="x-default" href="{{defaultUrl}}">{{else}}<meta name="robots" content="noindex">{{/if}}
+<link rel="alternate" type="application/rss+xml" title="{{blog.title}}" href="{{page.feedHref}}">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

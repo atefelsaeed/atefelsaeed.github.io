@@ -141,15 +141,19 @@
       { "pills": ["GitHub Actions", "Codemagic", "Fastlane", "App Store Connect", "Play Console"] }
     ]
   },
+  "articles": [
+    { "id": "portfolio-without-a-framework", "date": "2026-10-28", "category": "general" }
+  ],
   "blog": {
     "medium": "https://medium.com/@atefelsaid3",
+    "categories": ["mobile", "general", "case"],
     "posts": [
-      { "title": "Mastering Tree Shaking in Flutter", "url": "https://medium.com/@atefelsaid3/mastering-tree-shaking-in-flutter-a-comprehensive-guide-to-optimizing-your-app-deedc098e4cc" },
-      { "title": "Why const Makes Your App Faster, but Sometimes Larger", "url": "https://medium.com/@atefelsaid3/why-using-const-in-flutter-makes-your-app-faster-but-sometimes-larger-2933a618782f" },
-      { "title": "Compile Time vs Run Time in Flutter", "url": "https://medium.com/@atefelsaid3/compile-time-vs-run-time-in-the-flutter-mobile-application-lifecycle-a221f9b3c613" },
-      { "title": "Navigation Tracking with RouteObserver and Riverpod", "url": "https://medium.com/@atefelsaid3/mastering-navigation-tracking-in-flutter-a-complete-guide-to-routeobserver-with-riverpod-ea23a12fb80c" },
-      { "title": "static, final, const, dynamic and var: How They Affect Memory", "url": "https://medium.com/@atefelsaid3/title-understanding-static-final-const-dynamic-and-var-in-flutter-how-they-affect-memory-35967829b34b" },
-      { "title": "Comparing Dart's Loops: Finding the Fastest Option", "url": "https://medium.com/@atefelsaid3/comparing-darts-loops-finding-the-fastest-option-e71b12130bb8" }
+      { "title": "Mastering Tree Shaking in Flutter", "url": "https://medium.com/@atefelsaid3/mastering-tree-shaking-in-flutter-a-comprehensive-guide-to-optimizing-your-app-deedc098e4cc", "category": "mobile" },
+      { "title": "Why const Makes Your App Faster, but Sometimes Larger", "url": "https://medium.com/@atefelsaid3/why-using-const-in-flutter-makes-your-app-faster-but-sometimes-larger-2933a618782f", "category": "mobile" },
+      { "title": "Compile Time vs Run Time in Flutter", "url": "https://medium.com/@atefelsaid3/compile-time-vs-run-time-in-the-flutter-mobile-application-lifecycle-a221f9b3c613", "category": "mobile" },
+      { "title": "Navigation Tracking with RouteObserver and Riverpod", "url": "https://medium.com/@atefelsaid3/mastering-navigation-tracking-in-flutter-a-complete-guide-to-routeobserver-with-riverpod-ea23a12fb80c", "category": "mobile" },
+      { "title": "static, final, const, dynamic and var: How They Affect Memory", "url": "https://medium.com/@atefelsaid3/title-understanding-static-final-const-dynamic-and-var-in-flutter-how-they-affect-memory-35967829b34b", "category": "mobile" },
+      { "title": "Comparing Dart's Loops: Finding the Fastest Option", "url": "https://medium.com/@atefelsaid3/comparing-darts-loops-finding-the-fastest-option-e71b12130bb8", "category": "mobile" }
     ]
   },
   "projects": [

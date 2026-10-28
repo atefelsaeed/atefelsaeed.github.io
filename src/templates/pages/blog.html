@@ -4,9 +4,12 @@
       <h1>{{blog.title}}</h1>
       <p>{{blog.intro}}</p>
     </div>
+    <div class="filters" id="blogFilters" role="group" aria-label="{{blog.filterLabel}}">{{#each blogCategories}}
+      <button class="filter" type="button" data-cat="{{id}}" aria-pressed="{{#if active}}true{{else}}false{{/if}}">{{name}}<span class="n">{{count}}</span></button>{{/each}}
+    </div>
     <h2 class="sr-only">{{blogPage.listLabel}}</h2>
-    <div class="posts">{{#each blog.posts}}
+    <div class="posts" id="blogPosts" style="margin-top:24px">{{#each posts}}
       {{> partials/post}}{{/each}}
     </div>
-    <div style="margin-top:24px"><a class="btn" href="{{blog.medium}}" target="_blank" rel="noopener">{{blog.allLabel}}</a></div>
+    <div style="margin-top:24px;display:flex;flex-wrap:wrap;gap:12px"><a class="btn" href="{{blog.medium}}" target="_blank" rel="noopener">{{blog.allLabel}}</a> <a class="btn" href="{{page.feedHref}}">{{blogPage.rss}}</a></div>
   </section>

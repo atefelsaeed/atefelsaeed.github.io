@@ -21,6 +21,7 @@ A static site with no framework. A small Node script (no dependencies) turns JSO
 
 ```
 src/
+  articles/          one folder per article with en.md and ar.md
   content/
     shared.json      same in every language: URLs, numbers, icons, tech names, image paths
     en.json          English text
@@ -35,7 +36,7 @@ src/
   css/               tokens.css (colors, themes) · base.css (reset, nav, buttons) · main.css (sections, responsive, RTL)
   js/                theme.js · projects.js · contact.js · main.js (menu, hero, scroll effects)
 public/              copied to the site root unchanged: images, CV, favicon, og-image, robots, 404
-scripts/             build.mjs (the build) · serve.mjs (dev server) · lib/template.mjs (template engine)
+scripts/             build.mjs (the build) · serve.mjs (dev server) · lib/template.mjs (template engine) · lib/markdown.mjs (articles)
 tests/               node:test checks that run before every deploy
 ```
 
@@ -48,6 +49,9 @@ Output goes to `dist/` (not committed), including a generated `sitemap.xml`. CSS
 | Home | `/` | `/ar.html` | Hero, about, services, experience, four featured projects, skills, blog, contact |
 | All projects | `/projects/` | `/ar/projects/` | Every project as a card (rendered at build time), with the industry filter |
 | Case study | `/projects/<id>/` | `/ar/projects/<id>/` | One page per entry in `cases`, with previous/next links |
+| Blog | `/blog/` | `/ar/blog/` | Articles written here and the ones on Medium, with a topic filter |
+| Article | `/blog/<id>/` | `/ar/blog/<id>/` | One page per entry in `articles`, with table of contents, copy buttons on code, related articles and `Article` structured data |
+| Feed | `/feed.xml` | `/ar/feed.xml` | RSS of the articles written here |
 | 404 | `/404.html` | | Built with the same layout; GitHub Pages serves it for every unknown URL |
 
 Every page knows its translation: the language button, `hreflang` links and the sitemap are generated from that. Project and case-study pages also get `BreadcrumbList` structured data and, for case studies, their own share image.
@@ -82,6 +86,7 @@ npm test        # build into a temp folder and check it
 - **Add a project to the list:** add `{ "id": "my-app", "links": [...] }` to `projects` in `shared.json`, and `{ "id": "my-app", "n", "c", "d", "m" }` at the same position in both language files. It shows up on `/projects/` automatically.
 - **Change the featured projects on the home page:** edit `home.featured` in `shared.json` (project ids, in display order).
 - **Add a case-study page:** add an entry to `cases` in `shared.json` (id, package name, store links, screenshots) and in both language files (text, `seo.title`, `seo.description`), plus the side panel `src/templates/cases/<id>.html`, then run `python3 scripts/make-og.py` (needs Pillow) to create its share image in `public/og/` after adding a tagline in that script. A test fails if the image is missing. Use the same id as the project, and its card on `/projects/` and on the home page gets a "Case study" link by itself.
+- **Add an article:** add `{ "id": "my-article", "date": "2026-11-01", "category": "mobile" }` to `articles` in `shared.json` (categories: `mobile`, `general`, `case`; a case-study article can also link to `/projects/<id>/`), then write `src/articles/my-article/en.md` and `ar.md`. Each starts with a front matter block (`title`, `description`, `tag`) and supports `##`/`###` headings, lists, quotes, fenced code, images and links. Raw HTML is escaped. Both languages are required. The reading time, table of contents (three or more `##` headings), feed entry, sitemap entry and related links come from the build. Add a line for it to `public/llms.txt`; a test fails if it is missing. Articles on Medium stay in `blog.posts`, each with a `category`.
 - **Add a job:** add an object to `experience.jobs` in both language files.
 - **Add a screenshot:** put the image in `public/assets/shots/`, then add `{ "src": ... }` to the case's `shots` in `shared.json` and `{ "alt": ... }` in both language files.
 - **Add a language:** copy `en.json` to `<code>.json` and translate it, add the code to `LANGUAGES` in `scripts/build.mjs`, and add the stylesheet rules for it if it is right-to-left. The sitemap and `hreflang` links follow by themselves. The language button in the nav links to one other language, so with three or more languages `partials/nav.html` needs a small switcher.

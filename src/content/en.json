@@ -184,9 +184,13 @@
     "rolesLabel": "Roles and ventures"
   },
   "blogPage": {
-    "seoTitle": "Flutter articles | Atef Elsaeed",
-    "seoDescription": "Articles on Flutter performance, Dart internals and everyday Flutter problems: tree shaking, const, compile time vs run time, navigation tracking and more.",
-    "listLabel": "All articles"
+    "seoTitle": "Articles | Atef Elsaeed",
+    "seoDescription": "Articles on Flutter performance and Dart internals, case studies from real products, and notes on building and shipping software.",
+    "listLabel": "All articles",
+    "back": "All articles",
+    "related": "Keep reading",
+    "toc": "In this article",
+    "rss": "RSS feed"
   },
   "projectPage": {
     "breadcrumb": "Breadcrumb",
@@ -383,9 +387,14 @@
   },
   "blog": {
     "label": "Blog",
-    "title": "Articles on Flutter",
-    "intro": "Notes from real work on performance, Dart internals and everyday Flutter problems.",
+    "title": "Articles",
+    "intro": "Notes from real work: mobile performance and Dart internals, case studies, and what I learned building my own products.",
     "readLabel": "Read on Medium",
+    "readHere": "Read the article",
+    "minRead": "min read",
+    "filterLabel": "Filter by topic",
+    "all": "All",
+    "categoryNames": { "mobile": "Mobile", "general": "General", "case": "Case studies" },
     "allLink": "See all articles",
     "allLabel": "All 10 articles on Medium",
     "posts": [

@@ -1,0 +1,26 @@
+  <article class="page article">
+    <div class="crumbs" role="navigation" aria-label="{{projectPage.breadcrumb}}"><a href="{{page.home}}">{{projectPage.home}}</a><span aria-hidden="true">/</span><a href="{{page.blogHref}}">{{blog.label}}</a><span aria-hidden="true">/</span><span aria-current="page">{{article.tag}}</span></div>
+    <header class="article-head">
+      <div class="post-meta"><span class="tag">{{article.categoryName}}</span><span class="label">{{article.dateText}} · {{article.readMin}} {{blog.minRead}}</span></div>
+      <h1>{{article.title}}</h1>
+      <p class="lead">{{article.description}}</p>
+    </header>
+    {{#if article.hasToc}}<nav class="toc" aria-label="{{blogPage.toc}}">
+      <span class="label">{{blogPage.toc}}</span>
+      <ol>{{#each article.toc}}
+        <li><a href="#{{id}}">{{text}}</a></li>{{/each}}
+      </ol>
+    </nav>{{/if}}
+    <div class="prose">
+{{{article.html}}}
+    </div>
+    <footer class="article-foot">
+      <a class="btn" href="{{page.blogHref}}">{{blogPage.back}}</a>
+    </footer>
+    {{#if article.related}}<section class="related" aria-labelledby="related-h">
+      <h2 id="related-h">{{blogPage.related}}</h2>
+      <div class="posts">{{#each article.related}}
+        <a class="post" href="{{href}}"><div class="post-meta"><span class="tag">{{tag}}</span><span class="label">{{dateText}}</span></div><h3>{{title}}</h3><p>{{description}}</p></a>{{/each}}
+      </div>
+    </section>{{/if}}
+  </article>
