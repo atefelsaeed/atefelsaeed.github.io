@@ -52,6 +52,10 @@ Output goes to `dist/` (not committed), including a generated `sitemap.xml`. CSS
 
 Every page knows its translation: the language button, `hreflang` links and the sitemap are generated from that. Project and case-study pages also get `BreadcrumbList` structured data and, for case studies, their own share image.
 
+### For crawlers and AI agents
+
+`public/robots.txt` allows search and AI answers, sets `Content-Signal: ai-train=no` and blocks the known training crawlers. `public/llms.txt` is a short map of the site for language models; a test checks that every link in it is a built page and that each case study is listed, so add a line there when you add a case. GitHub Pages cannot set response headers, so `Link` headers and Markdown negotiation are not possible here. Check the live site with [isitagentready.com](https://isitagentready.com).
+
 ### Commands
 
 Needs Node 20 or newer. There is nothing to install.

@@ -1,3 +1,26 @@
+# Everyone may read the site and show it in search and AI answers; training on it is not allowed.
 User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
+
+# Crawlers that collect training data
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+User-agent: CCBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Bytespider
+User-agent: meta-externalagent
+Disallow: /
+
+# Crawlers and agents that fetch a page to answer a question or to search
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+Allow: /
+
 Sitemap: https://atefelsaeed.github.io/sitemap.xml

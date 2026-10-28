@@ -1,0 +1,27 @@
+# Atef Elsaeed
+
+> Senior Flutter developer in Cairo, Egypt. Five years building production mobile apps in fintech, government and consumer products. Co-founder of Adrenaline Platform and Dikirnis On. The site is in English and Arabic.
+
+## Pages
+
+- [Home](https://atefelsaeed.github.io/): about, services, experience, featured projects, skills, contact
+- [All projects](https://atefelsaeed.github.io/projects/): every project with its industry
+- [Experience](https://atefelsaeed.github.io/experience/): jobs and what was built in each
+- [Blog](https://atefelsaeed.github.io/blog/): articles, also on Medium
+- [Arabic version](https://atefelsaeed.github.io/ar.html): the same pages in Arabic
+
+## Case studies
+
+- [Dikirnis On](https://atefelsaeed.github.io/projects/dikirnis/): local super-app built solo, 2,500+ users in 5 months
+- [Prime Source](https://atefelsaeed.github.io/projects/prime-source/): Hajj operations app, cut from 250 MB to 85 MB
+- [Miqat](https://atefelsaeed.github.io/projects/miqat/): free, ad-free Islamic companion app
+- [RepoSphere](https://atefelsaeed.github.io/projects/reposphere/): one dashboard for GitHub, GitLab, Azure DevOps and Gitea repos, PRs and issues
+- [Belmally ERP](https://atefelsaeed.github.io/projects/belmally/): ERP with a web app, a desktop POS and a mobile sales app
+- [XPrinter](https://atefelsaeed.github.io/projects/xprinter/): Android app that prints PDFs on 80 mm Bluetooth thermal printers, used by a client
+
+## Contact
+
+- Email: atefelsaid3@gmail.com
+- [LinkedIn](https://www.linkedin.com/in/atefelsaeed/)
+- [Medium](https://medium.com/@atefelsaid3)
+- [CV (PDF)](https://atefelsaeed.github.io/Atef_Elsaeed_CV.pdf)

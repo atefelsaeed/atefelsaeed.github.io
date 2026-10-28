@@ -304,6 +304,22 @@ test('the generated sitemap lists every page with its translations', async () =>
   assert.equal((sitemap.match(/<url>/g) || []).length, pages.length);
 });
 
+test('robots.txt keeps the sitemap and the AI crawler rules, and llms.txt only links to pages that exist', async () => {
+  const robots = await read('robots.txt');
+  assert.match(robots, /^Sitemap: https:\/\/atefelsaeed\.github\.io\/sitemap\.xml$/m);
+  assert.match(robots, /^Content-Signal: .*ai-train=no/m);
+  assert.match(robots, /^User-agent: GPTBot$/m);
+  const llms = await read('llms.txt');
+  const urls = [...llms.matchAll(/\]\((https:\/\/atefelsaeed\.github\.io[^)]*)\)/g)].map((m) => m[1]);
+  assert.ok(urls.length >= 10, 'llms.txt lists the pages');
+  for (const url of urls) {
+    const href = new URL(url).pathname;
+    const file = href.endsWith('/') ? `${href.slice(1)}index.html` : href.slice(1);
+    assert.ok(await exists(join(out, file)), `llms.txt links to ${url}, which is not built`);
+  }
+  for (const c of shared.cases) assert.ok(llms.includes(`/projects/${c.id}/`), `llms.txt misses the ${c.id} case study`);
+});
+
 test('the build is deterministic', async () => {
   const again = await mkdtemp(join(tmpdir(), 'portfolio-again-'));
   try {
