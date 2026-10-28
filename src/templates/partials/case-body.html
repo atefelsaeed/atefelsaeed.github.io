@@ -5,6 +5,10 @@
     <div><dt>{{dt}}</dt><dd>{{dd}}</dd></div>{{/each}}{{#each more}}
     <div><dt>{{dt}}</dt><dd>{{dd}}</dd></div>{{/each}}
   </dl>
+  {{#if benefits}}<span class="label">{{benefitsLabel}}</span>
+  <div class="modules">{{#each benefits}}
+    <div class="module">{{t}}<small>{{d}}</small></div>{{/each}}
+  </div>{{/if}}
   {{#if links}}<div class="links">{{#each links}}
     <a href="{{url}}" target="_blank" rel="noopener">{{label}}</a>{{/each}}
   </div>{{/if}}

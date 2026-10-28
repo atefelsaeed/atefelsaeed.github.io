@@ -318,7 +318,17 @@
         { "dt": "Next", "dd": "Still open: Egyptian e-invoicing (ETA), which waits for a real customer; push-notification setup; and testing receipt printing and camera barcode scanning on real devices." }
       ],
       "asideLabel": "How Belmally is put together",
+      "benefitsLabel": "Why it works for a business",
+      "benefits": [
+        { "t": "One system, three ways to use it", "d": "Managers use the web dashboard, cashiers the desktop POS and sales reps the mobile app, all on the same data." },
+        { "t": "Works without internet", "d": "The POS and the sales app keep selling offline and sync automatically when the connection returns." },
+        { "t": "Your server or the cloud", "d": "One Docker Compose setup runs the database, API and web app on a customer's own server or a cloud server, with daily backups and deploys from GitHub Actions." },
+        { "t": "Books that close themselves", "d": "Every sale, purchase, expense and return posts its own accounting entries, with VAT, trial balance, income statement and balance sheet." },
+        { "t": "Only the modules a customer needs", "d": "Manufacturing, devices and warranty, installments, CRM, multi-branch and more are switched on per company." },
+        { "t": "Arabic first", "d": "Right-to-left layouts and Arabic on all four apps, with English one tap away." }
+      ],
       "shots": [
+        { "alt": "Belmally on three platforms: web dashboard, desktop POS and the field sales mobile app" },
         { "alt": "Belmally dashboard: month sales, cash, top products and payment methods" },
         { "alt": "Belmally journal entries posted automatically from sales invoices" },
         { "alt": "Belmally customers with balances, credit limits and loyalty points" }
